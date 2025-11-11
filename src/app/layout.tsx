@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup, SidebarGroupLabel, SidebarContent } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush } from 'lucide-react';
+import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'ClickTrack',
@@ -20,6 +20,10 @@ const CupcakeIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="m15 18-1.5-1.5" />
   </svg>
 );
+
+const ButterflyIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M14 10h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4"/><path d="M10 10H6a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4"/><path d="m5 11 1-1-1-1"/><path d="m19 11-1-1 1-1"/><path d="m12 10 2-3h-4l2 3z"/><path d="m12 14-2 3h4l-2-3z"/></svg>
+)
 
 
 export default function RootLayout({
@@ -68,6 +72,14 @@ export default function RootLayout({
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                   <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/cps-test-1s">
+                        <Zap />
+                        CPS Test (1s)
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link href="/jitter-click-test">
@@ -81,6 +93,14 @@ export default function RootLayout({
                       <Link href="/kohi-click-test">
                         <Target />
                         Kohi Click Test
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                   <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/butterfly-click-test">
+                        <ButterflyIcon />
+                        Butterfly Click Test
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -119,6 +139,14 @@ export default function RootLayout({
                       <Link href="/typing-test">
                         <Type />
                         Typing Test
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                   <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/typing-test-30s">
+                        <Type />
+                        Typing Test (30s)
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -203,6 +231,14 @@ export default function RootLayout({
                       <Link href="/visual-memory-test">
                         <Eye />
                         Visual Memory
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                   <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/word-memory-test">
+                        <FileText />
+                        Word Memory
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

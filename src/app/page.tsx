@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -13,6 +13,10 @@ const CupcakeIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="m15 18-1.5-1.5" />
   </svg>
 );
+
+const ButterflyIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M14 10h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4"/><path d="M10 10H6a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4"/><path d="m5 11 1-1-1-1"/><path d="m19 11-1-1 1-1"/><path d="m12 10 2-3h-4l2 3z"/><path d="m12 14-2 3h4l-2-3z"/></svg>
+)
 
 export default function Home() {
   return (
@@ -32,6 +36,12 @@ export default function Home() {
             title="CPS Test"
             description="Test your clicks per second."
           />
+           <GameCard
+            href="/cps-test-1s"
+            icon={<Zap className="w-8 h-8 text-primary" />}
+            title="CPS Test (1s)"
+            description="A quick burst click challenge."
+          />
           <GameCard
             href="/jitter-click-test"
             icon={<Wind className="w-8 h-8 text-primary" />}
@@ -43,6 +53,12 @@ export default function Home() {
             icon={<Target className="w-8 h-8 text-primary" />}
             title="Kohi Click Test"
             description="A classic 10-second click test."
+          />
+           <GameCard
+            href="/butterfly-click-test"
+            icon={<ButterflyIcon className="w-8 h-8 text-primary" />}
+            title="Butterfly Click Test"
+            description="A 20-second clicking challenge."
           />
           <GameCard
             href="/aim-trainer"
@@ -70,6 +86,12 @@ export default function Home() {
             icon={<Type className="w-8 h-8 text-primary" />}
             title="Typing Speed Test"
             description="Check your typing words per minute."
+          />
+           <GameCard
+            href="/typing-test-30s"
+            icon={<Type className="w-8 h-8 text-primary" />}
+            title="Typing Speed Test (30s)"
+            description="A quick typing sprint."
           />
         </GameCategory>
 
@@ -130,6 +152,12 @@ export default function Home() {
             icon={<Eye className="w-8 h-8 text-primary" />}
             title="Visual Memory"
             description="Memorize the pattern of tiles."
+          />
+           <GameCard
+            href="/word-memory-test"
+            icon={<FileText className="w-8 h-8 text-primary" />}
+            title="Word Memory Test"
+            description="Memorize a list of words."
           />
         </GameCategory>
         
