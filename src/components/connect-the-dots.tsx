@@ -45,20 +45,15 @@ export function ConnectTheDots() {
 
   const lines = useMemo(() => {
     const renderedLines = [];
-    for (let i = 0; i < connectedCount - 1; i++) {
+    const count = gameState === 'finished' ? connectedCount : connectedCount -1;
+
+    for (let i = 0; i < count; i++) {
       const p1 = starPoints[i];
-      const p2 = starPoints[i + 1];
+      const p2 = starPoints[(i + 1) % starPoints.length];
+       if (i === starPoints.length - 1 && gameState !== 'finished') continue;
       renderedLines.push(
         <line key={`line-${i}`} x1={`${p1.x}%`} y1={`${p1.y}%`} x2={`${p2.x}%`} y2={`${p2.y}%`} stroke="hsl(var(--primary))" strokeWidth="2" />
       );
-    }
-    // Close the star shape when finished
-    if (gameState === 'finished') {
-        const p1 = starPoints[starPoints.length - 1];
-        const p2 = starPoints[0];
-        renderedLines.push(
-            <line key="line-final" x1={`${p1.x}%`} y1={`${p1.y}%`} x2={`${p2.x}%`} y2={`${p2.y}%`} stroke="hsl(var(--primary))" strokeWidth="2" />
-        );
     }
     return renderedLines;
   }, [connectedCount, gameState]);
@@ -66,7 +61,7 @@ export function ConnectTheDots() {
   const renderContent = () => {
     if (gameState === 'idle') {
       return (
-        <div className="text-center p-6 flex flex-col items-center justify-center min-h-[400px]">
+        <div className="absolute inset-0 bg-background/80 flex flex-col items-center justify-center text-center rounded-lg">
           <h2 className="text-2xl font-semibold text-foreground/90">Connect the Dots</h2>
           <p className="text-muted-foreground mt-2">Click the numbers in order to reveal the picture.</p>
         </div>
@@ -109,21 +104,23 @@ export function ConnectTheDots() {
                             className={cn(
                                 "transition-colors",
                                 index < connectedCount ? "fill-primary" : "fill-muted-foreground",
-                                index === connectedCount && "fill-primary animate-pulse"
+                                index === connectedCount && gameState === 'playing' && "fill-primary animate-pulse"
                             )}
                         />
-                        <text
-                            x={point.x > 50 ? `${point.x - 4}%` : `${point.x + 4}%`}
-                            y={`${point.y}%`}
-                            dy="0.3em"
-                            textAnchor={point.x > 50 ? "end" : "start"}
-                            className={cn(
-                                "text-sm font-bold fill-muted-foreground select-none",
-                                 index < connectedCount && "fill-primary/50"
-                            )}
-                        >
-                            {index + 1}
-                        </text>
+                        {gameState !== 'finished' && (
+                             <text
+                                x={point.x > 50 ? `${point.x - 4}%` : `${point.x + 4}%`}
+                                y={`${point.y}%`}
+                                dy="0.3em"
+                                textAnchor={point.x > 50 ? "end" : "start"}
+                                className={cn(
+                                    "text-sm font-bold fill-muted-foreground select-none",
+                                    index < connectedCount && "fill-primary/50"
+                                )}
+                            >
+                                {index + 1}
+                            </text>
+                        )}
                     </g>
                 ))}
             </svg>
