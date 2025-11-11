@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Zap, Hand, Target, Wind, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit } from "lucide-react";
+import { Zap, Hand, Target, Wind, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, Cupcake } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -72,6 +72,12 @@ export default function Home() {
           icon={<BrainCircuit className="w-8 h-8 text-primary" />}
           title="Memory Game"
           description="Test your memory and concentration."
+        />
+         <GameCard
+          href="/cupcake-2048"
+          icon={<Cupcake className="w-8 h-8 text-primary" />}
+          title="Cupcake 2048"
+          description="A delicious puzzle game."
         />
       </div>
     </div>
