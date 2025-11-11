@@ -1,0 +1,181 @@
+"use client";
+
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Play, RefreshCw } from 'lucide-react';
+
+const GAME_DURATION = 5; // seconds
+const WAIT_DURATION = 3; // seconds
+
+type GameState = 'idle' | 'waiting' | 'running' | 'finished';
+
+interface ClickData {
+  second: string;
+  clicks: number;
+}
+
+export function CpsTest() {
+  const [gameState, setGameState] = useState<GameState>('idle');
+  const [countdown, setCountdown] = useState(WAIT_DURATION);
+  const [gameTimer, setGameTimer] = useState(GAME_DURATION);
+  const [clickCount, setClickCount] = useState(0);
+  const [clickTimestamps, setClickTimestamps] = useState<number[]>([]);
+  const [startTime, setStartTime] = useState<number>(0);
+
+  const handleStart = useCallback(() => {
+    setGameState('waiting');
+    setCountdown(WAIT_DURATION);
+    setClickCount(0);
+    setClickTimestamps([]);
+    setStartTime(0);
+    setGameTimer(GAME_DURATION);
+  }, []);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (gameState === 'waiting' && countdown > 0) {
+      intervalId = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    } else if (gameState === 'waiting' && countdown === 0) {
+      setGameState('running');
+      setStartTime(Date.now());
+    }
+    return () => clearInterval(intervalId);
+  }, [gameState, countdown]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (gameState === 'running' && gameTimer > 0) {
+      intervalId = setInterval(() => {
+        setGameTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (gameState === 'running' && gameTimer === 0) {
+      setGameState('finished');
+    }
+    return () => clearInterval(intervalId);
+  }, [gameState, gameTimer]);
+
+  const handleClick = useCallback(() => {
+    if (gameState === 'running') {
+      setClickCount((prev) => prev + 1);
+      setClickTimestamps((prev) => [...prev, Date.now()]);
+    }
+  }, [gameState]);
+
+  const cps = useMemo(() => {
+    if (clickCount === 0 || GAME_DURATION === 0) return 0;
+    return parseFloat((clickCount / GAME_DURATION).toFixed(2));
+  }, [clickCount]);
+
+  const chartData = useMemo((): ClickData[] => {
+    if (gameState !== 'finished' || startTime === 0) {
+      return Array.from({ length: GAME_DURATION }, (_, i) => ({ second: `${i + 1}s`, clicks: 0 }));
+    }
+
+    const buckets: number[] = Array(GAME_DURATION).fill(0);
+    clickTimestamps.forEach(ts => {
+      const secondIndex = Math.floor((ts - startTime) / 1000);
+      if (secondIndex >= 0 && secondIndex < GAME_DURATION) {
+        buckets[secondIndex]++;
+      }
+    });
+    
+    return buckets.map((clicks, i) => ({
+      second: `${i + 1}s`,
+      clicks,
+    }));
+  }, [gameState, clickTimestamps, startTime]);
+  
+  const chartConfig = {
+    clicks: {
+      label: "Clicks",
+      color: "hsl(var(--accent))",
+    },
+  };
+
+  const renderContent = () => {
+    switch (gameState) {
+      case 'idle':
+        return (
+          <div className="text-center p-6">
+            <h2 className="text-2xl font-semibold text-foreground/90">Clicks Per Second Test</h2>
+            <p className="text-muted-foreground mt-2">Test your clicking speed! Click the start button and then click as fast as you can in the box for {GAME_DURATION} seconds.</p>
+          </div>
+        );
+      case 'waiting':
+        return (
+          <div className="text-center">
+            <p className="text-muted-foreground">Get ready...</p>
+            <p className="text-8xl font-bold font-headline text-primary">{countdown}</p>
+          </div>
+        );
+      case 'running':
+        return (
+          <div className="text-center relative w-full h-full flex flex-col justify-center items-center">
+             <div className="absolute top-4 right-4 text-2xl font-semibold text-accent">{gameTimer}s</div>
+             <p className="text-8xl font-bold font-headline text-primary">{clickCount}</p>
+             <p className="text-lg text-muted-foreground mt-2">Click!</p>
+          </div>
+        );
+      case 'finished':
+        return (
+          <div className="text-center p-6">
+            <p className="text-muted-foreground">Your Score</p>
+            <p className="text-7xl font-bold font-headline text-primary">{cps}</p>
+            <p className="text-muted-foreground">Clicks Per Second</p>
+            <p className="mt-4 text-lg">You clicked <span className="font-bold text-foreground">{clickCount}</span> times in {GAME_DURATION} seconds.</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8">
+      <Card className="w-full shadow-lg overflow-hidden">
+        <CardContent 
+          className="p-0"
+          onClick={handleClick}
+        >
+          <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-accent/10 cursor-pointer active:scale-[0.99] active:bg-accent/20' : ''}`}>
+            {renderContent()}
+          </div>
+        </CardContent>
+        {(gameState === 'idle' || gameState === 'finished') && (
+            <CardFooter className="flex justify-center p-6 border-t bg-card">
+              <Button size="lg" onClick={handleStart} className="w-full sm:w-auto">
+                {gameState === 'idle' ? <Play className="mr-2"/> : <RefreshCw className="mr-2"/>}
+                {gameState === 'idle' ? 'Start Test' : 'Try Again'}
+              </Button>
+            </CardFooter>
+        )}
+      </Card>
+      
+      {gameState === 'finished' && (
+        <Card className="w-full shadow-lg">
+          <CardHeader>
+            <CardTitle>Click Rate Analysis</CardTitle>
+            <CardDescription>Your click performance over each second.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig} className="h-[250px] w-full">
+              <LineChart accessibilityLayer data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="second" tickLine={false} axisLine={false} tickMargin={8} />
+                <YAxis tickLine={false} axisLine={false} tickMargin={8} allowDecimals={false} label={{ value: 'Clicks', angle: -90, position: 'insideLeft', offset: 10 }}/>
+                 <ChartTooltip
+                  cursor={true}
+                  content={<ChartTooltipContent indicator="line" />}
+                />
+                <Line dataKey="clicks" type="monotone" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ fill: "hsl(var(--primary))", r: 5 }} activeDot={{ r: 8, style: { stroke: 'hsl(var(--accent))' } }}/>
+              </LineChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
