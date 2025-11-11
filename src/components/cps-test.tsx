@@ -7,7 +7,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } fro
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Play, RefreshCw } from 'lucide-react';
 
-const GAME_DURATION = 5; // seconds
 const WAIT_DURATION = 3; // seconds
 
 type GameState = 'idle' | 'waiting' | 'running' | 'finished';
@@ -17,10 +16,14 @@ interface ClickData {
   clicks: number;
 }
 
-export function CpsTest() {
+interface CpsTestProps {
+  gameDuration: number;
+}
+
+export function CpsTest({ gameDuration }: CpsTestProps) {
   const [gameState, setGameState] = useState<GameState>('idle');
   const [countdown, setCountdown] = useState(WAIT_DURATION);
-  const [gameTimer, setGameTimer] = useState(GAME_DURATION);
+  const [gameTimer, setGameTimer] = useState(gameDuration);
   const [clickCount, setClickCount] = useState(0);
   const [clickTimestamps, setClickTimestamps] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
@@ -31,8 +34,8 @@ export function CpsTest() {
     setClickCount(0);
     setClickTimestamps([]);
     setStartTime(0);
-    setGameTimer(GAME_DURATION);
-  }, []);
+    setGameTimer(gameDuration);
+  }, [gameDuration]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -67,19 +70,19 @@ export function CpsTest() {
   }, [gameState]);
 
   const cps = useMemo(() => {
-    if (clickCount === 0 || GAME_DURATION === 0) return 0;
-    return parseFloat((clickCount / GAME_DURATION).toFixed(2));
-  }, [clickCount]);
+    if (clickCount === 0 || gameDuration === 0) return 0;
+    return parseFloat((clickCount / gameDuration).toFixed(2));
+  }, [clickCount, gameDuration]);
 
   const chartData = useMemo((): ClickData[] => {
     if (gameState !== 'finished' || startTime === 0) {
-      return Array.from({ length: GAME_DURATION }, (_, i) => ({ second: `${i + 1}s`, clicks: 0 }));
+      return Array.from({ length: gameDuration }, (_, i) => ({ second: `${i + 1}s`, clicks: 0 }));
     }
 
-    const buckets: number[] = Array(GAME_DURATION).fill(0);
+    const buckets: number[] = Array(gameDuration).fill(0);
     clickTimestamps.forEach(ts => {
       const secondIndex = Math.floor((ts - startTime) / 1000);
-      if (secondIndex >= 0 && secondIndex < GAME_DURATION) {
+      if (secondIndex >= 0 && secondIndex < gameDuration) {
         buckets[secondIndex]++;
       }
     });
@@ -88,7 +91,7 @@ export function CpsTest() {
       second: `${i + 1}s`,
       clicks,
     }));
-  }, [gameState, clickTimestamps, startTime]);
+  }, [gameState, clickTimestamps, startTime, gameDuration]);
   
   const chartConfig = {
     clicks: {
@@ -103,7 +106,7 @@ export function CpsTest() {
         return (
           <div className="text-center p-6">
             <h2 className="text-2xl font-semibold text-foreground/90">Clicks Per Second Test</h2>
-            <p className="text-muted-foreground mt-2">Test your clicking speed! Click the start button and then click as fast as you can in the box for {GAME_DURATION} seconds.</p>
+            <p className="text-muted-foreground mt-2">Test your clicking speed! Click the start button and then click as fast as you can in the box for {gameDuration} seconds.</p>
           </div>
         );
       case 'waiting':
@@ -127,7 +130,7 @@ export function CpsTest() {
             <p className="text-muted-foreground">Your Score</p>
             <p className="text-7xl font-bold font-headline text-primary">{cps}</p>
             <p className="text-muted-foreground">Clicks Per Second</p>
-            <p className="mt-4 text-lg">You clicked <span className="font-bold text-foreground">{clickCount}</span> times in {GAME_DURATION} seconds.</p>
+            <p className="mt-4 text-lg">You clicked <span className="font-bold text-foreground">{clickCount}</span> times in {gameDuration} seconds.</p>
           </div>
         );
     }
