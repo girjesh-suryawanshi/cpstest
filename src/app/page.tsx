@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -107,6 +107,12 @@ export default function Home() {
             icon={<CupcakeIcon className="w-8 h-8 text-primary" />}
             title="Cupcake 2048"
             description="A delicious puzzle game."
+          />
+          <GameCard
+            href="/jigsaw-puzzle"
+            icon={<Grip className="w-8 h-8 text-primary" />}
+            title="Jigsaw Puzzle"
+            description="Unscramble the image."
           />
         </GameCategory>
 

@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "puzzle-1",
+      "description": "A placeholder image for the jigsaw puzzle.",
+      "imageUrl": "https://images.unsplash.com/photo-1692782040975-96fe03291fa6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bGFuZHNjYXBlJTIwbmF0dXJlfGVufDB8fHx8MTc2Mjg1Mzc1MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "landscape nature"
+    }
+  ]
 }
