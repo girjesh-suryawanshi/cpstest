@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup, SidebarGroupLabel, SidebarContent } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain } from 'lucide-react';
+import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'ClickTrack',
@@ -179,6 +179,22 @@ export default function RootLayout({
                       <Link href="/sequence-memory-test">
                         <BrainCircuit />
                         Sequence Memory
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/verbal-memory-test">
+                        <MessageSquare />
+                        Verbal Memory
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                   <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/visual-memory-test">
+                        <Eye />
+                        Visual Memory
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

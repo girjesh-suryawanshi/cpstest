@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -112,6 +112,18 @@ export default function Home() {
             icon={<BrainCircuit className="w-8 h-8 text-primary" />}
             title="Sequence Memory"
             description="Memorize and repeat the sequence."
+          />
+          <GameCard
+            href="/verbal-memory-test"
+            icon={<MessageSquare className="w-8 h-8 text-primary" />}
+            title="Verbal Memory"
+            description="See how many words you can remember."
+          />
+          <GameCard
+            href="/visual-memory-test"
+            icon={<Eye className="w-8 h-8 text-primary" />}
+            title="Visual Memory"
+            description="Memorize the pattern of tiles."
           />
         </GameCategory>
       </div>
