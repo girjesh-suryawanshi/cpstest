@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2 } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -203,6 +203,12 @@ export default function Home() {
               icon={<Blocks className="w-8 h-8 text-primary" />}
               title="Block Builder"
               description="Create anything with colorful blocks."
+            />
+            <GameCard
+              href="/connect-the-dots"
+              icon={<Share2 className="w-8 h-8 text-primary" />}
+              title="Connect the Dots"
+              description="Reveal the hidden picture."
             />
         </GameCategory>
       </div>
