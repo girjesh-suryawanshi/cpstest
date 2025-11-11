@@ -55,7 +55,7 @@ export function TypingTest() {
       timer = setInterval(() => {
         setTimeLeft(prev => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
+    } else if (timeLeft === 0 && gameState === 'running') {
       setGameState('finished');
     }
     return () => clearInterval(timer);
@@ -63,7 +63,7 @@ export function TypingTest() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (gameState === 'idle') {
+    if (gameState === 'idle' && value.length > 0) {
       setGameState('running');
     }
 
@@ -78,7 +78,7 @@ export function TypingTest() {
     setErrorCount(currentErrors);
     setInputValue(value);
 
-    if (value.length === sampleText.length) {
+    if (value.length === sampleText.length && currentErrors === 0) {
       setGameState('finished');
     }
   };
@@ -88,30 +88,32 @@ export function TypingTest() {
   };
   
   const wpm = useMemo(() => {
-    const wordsTyped = inputValue.trim().split(/\s+/).length;
+    const wordsTyped = inputValue.trim().split(/\s+/).filter(Boolean).length;
     const timeElapsed = gameDuration - timeLeft;
     if (wordsTyped === 0 || timeElapsed === 0) return 0;
     const minutes = timeElapsed / 60;
-    return Math.round(wordsTyped / minutes);
-  }, [inputValue, timeLeft, gameDuration]);
+    const grossWpm = wordsTyped / minutes;
+    const netWpm = Math.round(grossWpm - (errorCount / 5) / minutes);
+    return Math.max(0, netWpm);
+  }, [inputValue, timeLeft, gameDuration, errorCount]);
 
   const accuracy = useMemo(() => {
     if (inputValue.length === 0) return 100;
     const correctChars = inputValue.length - errorCount;
     return Math.round((correctChars / inputValue.length) * 100);
-  }, [inputValue, errorCount]);
+  }, [inputValue.length, errorCount]);
 
   const renderedText = useMemo(() => {
     return sampleText.split('').map((char, index) => {
-      let className = "text-muted-foreground";
+      let className = "text-muted-foreground/70";
       if (index < inputValue.length) {
         if (char === inputValue[index]) {
           className = "text-foreground";
         } else {
-          className = "text-destructive bg-destructive/20";
+          className = "text-destructive bg-destructive/20 rounded-sm";
         }
       }
-      return <span key={index} className={cn(className, { 'border-b-2 border-primary': index === inputValue.length })}>{char}</span>;
+      return <span key={index} className={cn(className, { 'animate-pulse border-b-2 border-primary': index === inputValue.length })}>{char}</span>;
     });
   }, [sampleText, inputValue]);
 
@@ -121,23 +123,29 @@ export function TypingTest() {
         <CardHeader>
            <div className="flex justify-between items-center">
              <CardTitle>Typing Test</CardTitle>
-             <Select value={gameDuration.toString()} onValueChange={handleDurationChange}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select duration" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="60">1 Minute</SelectItem>
-                  <SelectItem value="120">2 Minutes</SelectItem>
-                  <SelectItem value="300">5 Minutes</SelectItem>
-                </SelectContent>
-              </Select>
+             <div className="flex items-center gap-4">
+                <div className="text-2xl font-semibold text-primary font-mono">
+                    {Math.floor(timeLeft / 60)}:{('0' + timeLeft % 60).slice(-2)}
+                </div>
+                 <Select value={gameDuration.toString()} onValueChange={handleDurationChange} disabled={gameState === 'running'}>
+                    <SelectTrigger className="w-[150px]">
+                      <SelectValue placeholder="Select duration" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="30">30 seconds</SelectItem>
+                      <SelectItem value="60">1 Minute</SelectItem>
+                      <SelectItem value="120">2 Minutes</SelectItem>
+                      <SelectItem value="300">5 Minutes</SelectItem>
+                    </SelectContent>
+                  </Select>
+             </div>
            </div>
         </CardHeader>
         <CardContent>
           {gameState !== 'finished' ? (
             <div className="relative">
               <div
-                className="text-2xl font-mono tracking-wide leading-relaxed break-words"
+                className="text-2xl font-mono tracking-wide leading-relaxed break-words p-4 rounded-lg bg-background border h-64 overflow-hidden"
                 onClick={() => inputRef.current?.focus()}
               >
                 {renderedText}
@@ -149,22 +157,24 @@ export function TypingTest() {
                 onChange={handleInputChange}
                 className="absolute inset-0 opacity-0 w-full h-full cursor-default"
                 disabled={gameState === 'finished'}
+                autoFocus
               />
-              <div className="absolute top-[-3rem] right-0 text-2xl font-semibold text-primary">
-                {Math.floor(timeLeft / 60)}:{('0' + timeLeft % 60).slice(-2)}
-              </div>
             </div>
           ) : (
             <div className="text-center p-6">
               <h2 className="text-2xl font-bold">Results</h2>
-              <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-2 gap-4 mt-4 text-center">
                 <div className="p-4 rounded-lg bg-muted">
-                  <p className="text-muted-foreground text-sm">WPM</p>
-                  <p className="text-4xl font-bold text-primary">{wpm}</p>
+                  <p className="text-muted-foreground text-sm font-medium">WPM (Words Per Minute)</p>
+                  <p className="text-5xl font-bold text-primary">{wpm}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted">
-                  <p className="text-muted-foreground text-sm">Accuracy</p>
-                  <p className="text-4xl font-bold text-primary">{accuracy}%</p>
+                  <p className="text-muted-foreground text-sm font-medium">Accuracy</p>
+                  <p className="text-5xl font-bold text-primary">{accuracy}%</p>
+                </div>
+                 <div className="p-4 rounded-lg bg-muted col-span-2">
+                  <p className="text-muted-foreground text-sm font-medium">Errors</p>
+                  <p className="text-5xl font-bold text-destructive">{errorCount}</p>
                 </div>
               </div>
             </div>

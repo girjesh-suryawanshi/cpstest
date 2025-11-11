@@ -71,8 +71,10 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
 
   const cps = useMemo(() => {
     if (clickCount === 0 || gameDuration === 0) return 0;
+    const actualDuration = (clickTimestamps[clickTimestamps.length - 1] - startTime) / 1000;
+    if (actualDuration <= 0) return 0;
     return parseFloat((clickCount / gameDuration).toFixed(2));
-  }, [clickCount, gameDuration]);
+  }, [clickCount, gameDuration, clickTimestamps, startTime]);
 
   const chartData = useMemo((): ClickData[] => {
     if (gameState !== 'finished' || startTime === 0) {
@@ -96,7 +98,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
   const chartConfig = {
     clicks: {
       label: "Clicks",
-      color: "hsl(var(--accent))",
+      color: "hsl(var(--primary))",
     },
   };
 
@@ -106,20 +108,20 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
         return (
           <div className="text-center p-6">
             <h2 className="text-2xl font-semibold text-foreground/90">Clicks Per Second Test</h2>
-            <p className="text-muted-foreground mt-2">Test your clicking speed! Click the start button and then click as fast as you can in the box for {gameDuration} seconds.</p>
+            <p className="text-muted-foreground mt-2">Test your clicking speed! Click the start button, wait for the countdown, then click as fast as you can for {gameDuration} seconds.</p>
           </div>
         );
       case 'waiting':
         return (
           <div className="text-center">
-            <p className="text-muted-foreground">Get ready...</p>
+            <p className="text-xl text-muted-foreground font-medium">Get ready...</p>
             <p className="text-8xl font-bold font-headline text-primary">{countdown}</p>
           </div>
         );
       case 'running':
         return (
           <div className="text-center relative w-full h-full flex flex-col justify-center items-center">
-             <div className="absolute top-4 right-4 text-2xl font-semibold text-accent">{gameTimer}s</div>
+             <div className="absolute top-4 right-4 text-2xl font-semibold text-primary">{gameTimer}s</div>
              <p className="text-8xl font-bold font-headline text-primary">{clickCount}</p>
              <p className="text-lg text-muted-foreground mt-2">Click!</p>
           </div>
@@ -127,7 +129,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
       case 'finished':
         return (
           <div className="text-center p-6">
-            <p className="text-muted-foreground">Your Score</p>
+            <p className="text-lg text-muted-foreground">Your Score</p>
             <p className="text-7xl font-bold font-headline text-primary">{cps}</p>
             <p className="text-muted-foreground">Clicks Per Second</p>
             <p className="mt-4 text-lg">You clicked <span className="font-bold text-foreground">{clickCount}</span> times in {gameDuration} seconds.</p>
@@ -143,7 +145,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
           className="p-0"
           onClick={handleClick}
         >
-          <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-accent/10 cursor-pointer active:scale-[0.99] active:bg-accent/20' : ''}`}>
+          <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-primary/5 cursor-pointer active:scale-[0.99] active:bg-primary/10' : ''}`}>
             {renderContent()}
           </div>
         </CardContent>

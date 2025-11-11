@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Play, RefreshCw, Keyboard } from 'lucide-react';
 
@@ -105,7 +105,7 @@ export function SpacebarTest({ gameDuration }: SpacebarTestProps) {
   const chartConfig = {
     clicks: {
       label: "Hits",
-      color: "hsl(var(--accent))",
+      color: "hsl(var(--primary))",
     },
   };
 
@@ -114,29 +114,29 @@ export function SpacebarTest({ gameDuration }: SpacebarTestProps) {
       case 'idle':
         return (
           <div className="text-center p-6">
-            <h2 className="text-2xl font-semibold text-foreground/90">Spacebar Clicker</h2>
+            <h2 className="text-2xl font-semibold text-foreground/90">Spacebar Test</h2>
             <p className="text-muted-foreground mt-2">Press start, then hit the spacebar as fast as you can for {gameDuration} seconds.</p>
           </div>
         );
       case 'waiting':
         return (
           <div className="text-center">
-            <p className="text-muted-foreground">Get ready...</p>
+            <p className="text-xl text-muted-foreground font-medium">Get ready...</p>
             <p className="text-8xl font-bold font-headline text-primary">{countdown}</p>
           </div>
         );
       case 'running':
         return (
           <div className="text-center relative w-full h-full flex flex-col justify-center items-center">
-             <div className="absolute top-4 right-4 text-2xl font-semibold text-accent">{gameTimer}s</div>
+             <div className="absolute top-4 right-4 text-2xl font-semibold text-primary">{gameTimer}s</div>
              <p className="text-8xl font-bold font-headline text-primary">{clickCount}</p>
-             <p className="text-lg text-muted-foreground mt-2 flex items-center gap-2">Press <Keyboard className="w-6 h-6 inline-block" /> !</p>
+             <div className="text-lg text-muted-foreground mt-2 flex items-center gap-2">Press <Keyboard className="w-6 h-6 inline-block border rounded-md p-1" /> !</div>
           </div>
         );
       case 'finished':
         return (
           <div className="text-center p-6">
-            <p className="text-muted-foreground">Your Score</p>
+            <p className="text-lg text-muted-foreground">Your Score</p>
             <p className="text-7xl font-bold font-headline text-primary">{cps}</p>
             <p className="text-muted-foreground">Hits Per Second</p>
             <p className="mt-4 text-lg">You hit the spacebar <span className="font-bold text-foreground">{clickCount}</span> times in {gameDuration} seconds.</p>
@@ -151,7 +151,7 @@ export function SpacebarTest({ gameDuration }: SpacebarTestProps) {
         <CardContent 
           className="p-0"
         >
-          <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-accent/10' : ''}`}>
+          <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-primary/5' : ''}`}>
             {renderContent()}
           </div>
         </CardContent>

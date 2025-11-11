@@ -5,14 +5,14 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center p-4 sm:p-8 md:p-12">
-      <header className="w-full max-w-4xl mx-auto mb-8 text-center">
-        <h1 className="text-4xl font-bold text-foreground">
+      <header className="w-full max-w-4xl mx-auto mb-12 text-center">
+        <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl">
           Welcome to ClickTrack
         </h1>
-        <p className="text-lg text-muted-foreground mt-2">Your one-stop destination for click speed tests and other fun games.</p>
+        <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">Your one-stop destination for click speed tests, reaction challenges, and other fun skill-based games.</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
         <GameCard
           href="/cps-test"
           icon={<Zap className="w-8 h-8 text-primary" />}
@@ -82,10 +82,12 @@ function GameCard({ href, icon, title, description }: { href: string; icon: Reac
   return (
     <Link href={href} className="group">
       <Card className="h-full transition-all duration-200 group-hover:shadow-xl group-hover:-translate-y-1">
-        <CardHeader className="flex flex-row items-center gap-4">
-          {icon}
+        <CardHeader className="flex flex-row items-center gap-4 p-4">
+          <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-200">
+            {icon}
+          </div>
           <div>
-            <CardTitle>{title}</CardTitle>
+            <CardTitle className="text-lg">{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
           </div>
         </CardHeader>
