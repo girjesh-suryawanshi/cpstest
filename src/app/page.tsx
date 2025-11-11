@@ -114,6 +114,12 @@ export default function Home() {
             title="Jigsaw Puzzle"
             description="Unscramble the image."
           />
+          <GameCard
+            href="/sliding-puzzle"
+            icon={<Puzzle className="w-8 h-8 text-primary" />}
+            title="Sliding Puzzle"
+            description="Slide tiles to solve the puzzle."
+          />
         </GameCategory>
 
         <GameCategory title="Memory & Reflex" icon={<Brain className="w-8 h-8" />}>
