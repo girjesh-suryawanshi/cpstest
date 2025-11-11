@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Zap, Hand, Target, Wind, Keyboard, Type, Timer, Disc } from "lucide-react";
+import { Zap, Hand, Target, Wind, Keyboard, Type, Timer, Disc, Crosshair } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -60,6 +60,12 @@ export default function Home() {
           icon={<Disc className="w-8 h-8 text-primary" />}
           title="Coreball Game"
           description="A game of precision and timing."
+        />
+        <GameCard
+          href="/aim-trainer"
+          icon={<Crosshair className="w-8 h-8 text-primary" />}
+          title="Aim Trainer"
+          description="Test your aiming skill and precision."
         />
       </div>
     </div>
