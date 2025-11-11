@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Zap, Hand, Target, Wind } from "lucide-react";
+import { Zap, Hand, Target, Wind, Keyboard } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -30,6 +30,12 @@ export default function Home() {
           icon={<Target className="w-8 h-8 text-primary" />}
           title="Kohi Click Test"
           description="A classic 10-second click test."
+        />
+        <GameCard
+          href="/spacebar-clicker"
+          icon={<Keyboard className="w-8 h-8 text-primary" />}
+          title="Spacebar Clicker"
+          description="Test your spacebar pressing speed."
         />
       </div>
     </div>

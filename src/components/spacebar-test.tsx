@@ -1,0 +1,192 @@
+"use client";
+
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Play, RefreshCw, Keyboard } from 'lucide-react';
+
+const WAIT_DURATION = 3; // seconds
+
+type GameState = 'idle' | 'waiting' | 'running' | 'finished';
+
+interface ClickData {
+  second: string;
+  clicks: number;
+}
+
+interface SpacebarTestProps {
+  gameDuration: number;
+}
+
+export function SpacebarTest({ gameDuration }: SpacebarTestProps) {
+  const [gameState, setGameState] = useState<GameState>('idle');
+  const [countdown, setCountdown] = useState(WAIT_DURATION);
+  const [gameTimer, setGameTimer] = useState(gameDuration);
+  const [clickCount, setClickCount] = useState(0);
+  const [clickTimestamps, setClickTimestamps] = useState<number[]>([]);
+  const [startTime, setStartTime] = useState<number>(0);
+
+  const handleStart = useCallback(() => {
+    setGameState('waiting');
+    setCountdown(WAIT_DURATION);
+    setClickCount(0);
+    setClickTimestamps([]);
+    setStartTime(0);
+    setGameTimer(gameDuration);
+  }, [gameDuration]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (gameState === 'waiting' && countdown > 0) {
+      intervalId = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    } else if (gameState === 'waiting' && countdown === 0) {
+      setGameState('running');
+      setStartTime(Date.now());
+    }
+    return () => clearInterval(intervalId);
+  }, [gameState, countdown]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (gameState === 'running' && gameTimer > 0) {
+      intervalId = setInterval(() => {
+        setGameTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (gameState === 'running' && gameTimer === 0) {
+      setGameState('finished');
+    }
+    return () => clearInterval(intervalId);
+  }, [gameState, gameTimer]);
+  
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.code === 'Space' && gameState === 'running') {
+      event.preventDefault();
+      setClickCount((prev) => prev + 1);
+      setClickTimestamps((prev) => [...prev, Date.now()]);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
+
+  const cps = useMemo(() => {
+    if (clickCount === 0 || gameDuration === 0) return 0;
+    return parseFloat((clickCount / gameDuration).toFixed(2));
+  }, [clickCount, gameDuration]);
+
+  const chartData = useMemo((): ClickData[] => {
+    if (gameState !== 'finished' || startTime === 0) {
+      return Array.from({ length: gameDuration }, (_, i) => ({ second: `${i + 1}s`, clicks: 0 }));
+    }
+
+    const buckets: number[] = Array(gameDuration).fill(0);
+    clickTimestamps.forEach(ts => {
+      const secondIndex = Math.floor((ts - startTime) / 1000);
+      if (secondIndex >= 0 && secondIndex < gameDuration) {
+        buckets[secondIndex]++;
+      }
+    });
+    
+    return buckets.map((clicks, i) => ({
+      second: `${i + 1}s`,
+      clicks,
+    }));
+  }, [gameState, clickTimestamps, startTime, gameDuration]);
+  
+  const chartConfig = {
+    clicks: {
+      label: "Hits",
+      color: "hsl(var(--accent))",
+    },
+  };
+
+  const renderContent = () => {
+    switch (gameState) {
+      case 'idle':
+        return (
+          <div className="text-center p-6">
+            <h2 className="text-2xl font-semibold text-foreground/90">Spacebar Clicker</h2>
+            <p className="text-muted-foreground mt-2">Press start, then hit the spacebar as fast as you can for {gameDuration} seconds.</p>
+          </div>
+        );
+      case 'waiting':
+        return (
+          <div className="text-center">
+            <p className="text-muted-foreground">Get ready...</p>
+            <p className="text-8xl font-bold font-headline text-primary">{countdown}</p>
+          </div>
+        );
+      case 'running':
+        return (
+          <div className="text-center relative w-full h-full flex flex-col justify-center items-center">
+             <div className="absolute top-4 right-4 text-2xl font-semibold text-accent">{gameTimer}s</div>
+             <p className="text-8xl font-bold font-headline text-primary">{clickCount}</p>
+             <p className="text-lg text-muted-foreground mt-2 flex items-center gap-2">Press <Keyboard className="w-6 h-6 inline-block" /> !</p>
+          </div>
+        );
+      case 'finished':
+        return (
+          <div className="text-center p-6">
+            <p className="text-muted-foreground">Your Score</p>
+            <p className="text-7xl font-bold font-headline text-primary">{cps}</p>
+            <p className="text-muted-foreground">Hits Per Second</p>
+            <p className="mt-4 text-lg">You hit the spacebar <span className="font-bold text-foreground">{clickCount}</span> times in {gameDuration} seconds.</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8">
+      <Card className="w-full shadow-lg overflow-hidden">
+        <CardContent 
+          className="p-0"
+        >
+          <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-accent/10' : ''}`}>
+            {renderContent()}
+          </div>
+        </CardContent>
+        {(gameState === 'idle' || gameState === 'finished') && (
+            <CardFooter className="flex justify-center p-6 border-t bg-card">
+              <Button size="lg" onClick={handleStart} className="w-full sm:w-auto">
+                {gameState === 'idle' ? <Play className="mr-2"/> : <RefreshCw className="mr-2"/>}
+                {gameState === 'idle' ? 'Start Test' : 'Try Again'}
+              </Button>
+            </CardFooter>
+        )}
+      </Card>
+      
+      {gameState === 'finished' && (
+        <Card className="w-full shadow-lg">
+          <CardHeader>
+            <CardTitle>Performance Analysis</CardTitle>
+            <CardDescription>Your spacebar performance over each second.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig} className="h-[250px] w-full">
+              <LineChart accessibilityLayer data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="second" tickLine={false} axisLine={false} tickMargin={8} />
+                <YAxis tickLine={false} axisLine={false} tickMargin={8} allowDecimals={false} label={{ value: 'Hits', angle: -90, position: 'insideLeft', offset: 10 }}/>
+                 <ChartTooltip
+                  cursor={true}
+                  content={<ChartTooltipContent indicator="line" />}
+                />
+                <Line dataKey="clicks" type="monotone" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ fill: "hsl(var(--primary))", r: 5 }} activeDot={{ r: 8, style: { stroke: 'hsl(var(--accent))' } }}/>
+              </LineChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
