@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -165,6 +165,15 @@ export default function Home() {
             title="Word Memory Test"
             description="Memorize a list of words."
           />
+        </GameCategory>
+
+        <GameCategory title="Educational" icon={<GraduationCap className="w-8 h-8" />}>
+            <GameCard
+              href="/math-quiz"
+              icon={<GraduationCap className="w-8 h-8 text-primary" />}
+              title="Math Quiz"
+              description="Test your arithmetic skills."
+            />
         </GameCategory>
         
         <GameCategory title="Creative" icon={<Paintbrush className="w-8 h-8" />}>
