@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -182,6 +182,12 @@ export default function Home() {
               icon={<Paintbrush className="w-8 h-8 text-primary" />}
               title="Drawing Pad"
               description="Unleash your creativity on a digital canvas."
+            />
+            <GameCard
+              href="/block-builder"
+              icon={<Blocks className="w-8 h-8 text-primary" />}
+              title="Block Builder"
+              description="Create anything with colorful blocks."
             />
         </GameCategory>
       </div>
