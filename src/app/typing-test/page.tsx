@@ -11,7 +11,7 @@ export default function TypingTestPage() {
           How fast can you type? The test will begin once you start typing.
         </p>
       </header>
-      <TypingTest />
+      <TypingTest gameDuration={60} />
     </div>
   );
 }

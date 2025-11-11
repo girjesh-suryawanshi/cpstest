@@ -11,7 +11,7 @@ export default function TypingTest30sPage() {
           A quick typing sprint. The test will begin once you start typing.
         </p>
       </header>
-      <TypingTest />
+      <TypingTest gameDuration={30} />
     </div>
   );
 }

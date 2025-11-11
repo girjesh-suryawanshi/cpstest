@@ -24,11 +24,15 @@ const TEXT_SAMPLES = {
 type TextKey = keyof typeof TEXT_SAMPLES;
 type GameState = 'idle' | 'running' | 'finished';
 
-export function TypingTest() {
+interface TypingTestProps {
+  gameDuration: number;
+}
+
+export function TypingTest({ gameDuration: initialDuration }: TypingTestProps) {
   const [gameState, setGameState] = useState<GameState>('idle');
-  const [gameDuration, setGameDuration] = useState(60);
+  const [gameDuration, setGameDuration] = useState(initialDuration);
   const [textKey, setTextKey] = useState<TextKey>("1");
-  const [timeLeft, setTimeLeft] = useState(gameDuration);
+  const [timeLeft, setTimeLeft] = useState(initialDuration);
   const [inputValue, setInputValue] = useState('');
   const [errorCount, setErrorCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,11 +46,12 @@ export function TypingTest() {
     setErrorCount(0);
     const newKey = (Math.floor(Math.random() * Object.keys(TEXT_SAMPLES).length) + 1).toString() as TextKey;
     setTextKey(newKey);
-    inputRef.current?.focus();
+    setTimeout(() => inputRef.current?.focus(), 0);
   }, [gameDuration]);
-
+  
   useEffect(() => {
-    handleStart();
+      setTimeLeft(gameDuration);
+      handleStart();
   }, [gameDuration, handleStart]);
 
   useEffect(() => {
