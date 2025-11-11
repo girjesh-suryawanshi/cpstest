@@ -320,18 +320,38 @@ export default function RootLayout({
                </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <SidebarInset>
-            <header className="flex h-12 items-center justify-between border-b bg-background/50 px-4 md:hidden">
-               <Link href="/" className="flex items-center gap-2">
-                  <Zap className="h-6 w-6 text-primary" />
-                  <span className="font-bold">ClickTrack</span>
-               </Link>
-               <SidebarTrigger />
-            </header>
-            <main className="flex-1 p-4 sm:p-6">
-              {children}
-            </main>
-          </SidebarInset>
+          <div className="flex flex-col min-h-screen">
+            <SidebarInset>
+              <header className="flex h-12 items-center justify-between border-b bg-background/50 px-4 md:hidden">
+                <Link href="/" className="flex items-center gap-2">
+                    <Zap className="h-6 w-6 text-primary" />
+                    <span className="font-bold">ClickTrack</span>
+                </Link>
+                <SidebarTrigger />
+              </header>
+              <main className="flex-1 p-4 sm:p-6">
+                {children}
+              </main>
+              <footer className="mt-auto border-t bg-background/50">
+                <div className="container mx-auto flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
+                  <p className="text-sm text-muted-foreground">
+                    &copy; {new Date().getFullYear()} ClickTrack. All rights reserved.
+                  </p>
+                  <nav className="flex items-center gap-4 sm:gap-6">
+                    <Link href="/about" className="text-sm hover:underline">
+                      About Us
+                    </Link>
+                    <Link href="/privacy" className="text-sm hover:underline">
+                      Privacy Policy
+                    </Link>
+                    <Link href="/contact" className="text-sm hover:underline">
+                      Contact Us
+                    </Link>
+                  </nav>
+                </div>
+              </footer>
+            </SidebarInset>
+          </div>
         </SidebarProvider>
         <Toaster />
       </body>
