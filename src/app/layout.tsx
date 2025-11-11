@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup, SidebarGroupLabel, SidebarContent } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare } from 'lucide-react';
+import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'ClickTrack',
@@ -208,6 +208,19 @@ export default function RootLayout({
                   </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroup>
+               <SidebarGroup>
+                <SidebarGroupLabel className="flex items-center gap-2"><Paintbrush /> Creative</SidebarGroupLabel>
+                 <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/drawing-pad">
+                          <Paintbrush />
+                          Drawing Pad
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                 </SidebarMenu>
+               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
           <SidebarInset>
