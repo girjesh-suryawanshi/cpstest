@@ -25,11 +25,9 @@ export function CoreballGame() {
   const [attachedBalls, setAttachedBalls] = useState<Ball[]>([]);
   const [movingBall, setMovingBall] = useState<MovingBall | null>(null);
   const [ballsLeft, setBallsLeft] = useState(15);
-  const [rotation, setRotation] = useState(0);
   const [level, setLevel] = useState(1);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const initialBalls = level > 1 ? [{angle: 0}, {angle: 180}] : [{ angle: 0 }];
+  const rotationRef = useRef(0);
 
   const resetGame = useCallback((newLevel = 1) => {
     setLevel(newLevel);
@@ -37,7 +35,7 @@ export function CoreballGame() {
     setAttachedBalls(newLevel > 1 ? [{angle: 0}, {angle: Math.PI}] : [{angle: 0}]);
     setBallsLeft(15 - (newLevel > 1 ? 2 : 1));
     setMovingBall(null);
-    setRotation(0);
+    rotationRef.current = 0;
   }, []);
 
   const handleStart = () => {
@@ -66,7 +64,7 @@ export function CoreballGame() {
 
     // Draw attached balls and lines
     attachedBalls.forEach(ball => {
-      const angle = ball.angle + rotation;
+      const angle = ball.angle + rotationRef.current;
       const x = center.x + ORBIT_RADIUS * Math.cos(angle);
       const y = center.y + ORBIT_RADIUS * Math.sin(angle);
 
@@ -102,7 +100,7 @@ export function CoreballGame() {
     ctx.textAlign = 'center';
     ctx.fillText(`Balls left: ${ballsLeft}`, center.x, 30);
 
-  }, [attachedBalls, movingBall, rotation, ballsLeft, level]);
+  }, [attachedBalls, movingBall, ballsLeft, level]);
 
 
   const shoot = useCallback(() => {
@@ -144,13 +142,13 @@ export function CoreballGame() {
     let animationFrameId: number;
 
     const gameLoop = () => {
-      setRotation(prev => prev + 0.005 * level);
+      rotationRef.current += 0.005 * level;
 
       if (movingBall) {
         const newY = movingBall.y - BALL_SPEED;
         if (newY <= center.y + ORBIT_RADIUS) {
           // Collision check
-          const newAngle = -Math.PI / 2 - rotation;
+          const newAngle = -Math.PI / 2 - rotationRef.current;
           
           let collision = false;
           attachedBalls.forEach(ball => {
@@ -180,7 +178,7 @@ export function CoreballGame() {
     }
 
     if (gameState === 'playing') {
-      gameLoop();
+      animationFrameId = requestAnimationFrame(gameLoop);
     } else {
        draw(context, center);
     }
@@ -189,7 +187,7 @@ export function CoreballGame() {
       cancelAnimationFrame(animationFrameId);
     };
 
-  }, [draw, gameState, movingBall, rotation, attachedBalls, ballsLeft, level]);
+  }, [draw, gameState, movingBall, attachedBalls, ballsLeft, level]);
 
   const renderOverlay = () => {
     if (gameState === 'gameover') {
