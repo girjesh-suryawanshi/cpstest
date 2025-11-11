@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Zap, Hand, Target, Wind, Keyboard } from "lucide-react";
+import { Zap, Hand, Target, Wind, Keyboard, Type } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -36,6 +36,12 @@ export default function Home() {
           icon={<Keyboard className="w-8 h-8 text-primary" />}
           title="Spacebar Clicker"
           description="Test your spacebar pressing speed."
+        />
+        <GameCard
+          href="/typing-test"
+          icon={<Type className="w-8 h-8 text-primary" />}
+          title="Typing Speed Test"
+          description="Check your typing words per minute."
         />
       </div>
     </div>
