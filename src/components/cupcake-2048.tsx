@@ -25,18 +25,14 @@ const createNewTile = (value: number): Tile => ({
   id: tileIdCounter++,
 });
 
-const getInitialGrid = (): Grid => {
-  const grid: Grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
-  addRandomTile(grid);
-  addRandomTile(grid);
-  return grid;
-};
+const getEmptyGrid = (): Grid => Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
 
 const addRandomTile = (grid: Grid): Grid => {
+  const newGrid = JSON.parse(JSON.stringify(grid));
   let emptyTiles: { r: number; c: number }[] = [];
-  grid.forEach((row, r) => {
-    row.forEach((_, c) => {
-      if (!grid[r][c]) {
+  newGrid.forEach((row: any, r: number) => {
+    row.forEach((_: any, c: number) => {
+      if (!newGrid[r][c]) {
         emptyTiles.push({ r, c });
       }
     });
@@ -45,9 +41,9 @@ const addRandomTile = (grid: Grid): Grid => {
   if (emptyTiles.length > 0) {
     const { r, c } = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
     const value = Math.random() < 0.9 ? 1 : 2;
-    grid[r][c] = createNewTile(value);
+    newGrid[r][c] = createNewTile(value);
   }
-  return grid;
+  return newGrid;
 };
 
 const rotateGrid = (grid: Grid): Grid => {
@@ -125,16 +121,26 @@ const isGameOver = (grid: Grid): boolean => {
 
 
 export function Cupcake2048() {
-  const [grid, setGrid] = useState<Grid>(getInitialGrid);
+  const [grid, setGrid] = useState<Grid>(getEmptyGrid);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  const handleReset = useCallback(() => {
+  const initializeGame = useCallback(() => {
     tileIdCounter = 1;
-    setGrid(getInitialGrid());
+    let newGrid = getEmptyGrid();
+    newGrid = addRandomTile(newGrid);
+    newGrid = addRandomTile(newGrid);
+    setGrid(newGrid);
     setScore(0);
     setGameOver(false);
   }, []);
+
+  useEffect(() => {
+    setIsClient(true);
+    initializeGame();
+  }, [initializeGame]);
+
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     e.preventDefault();
@@ -149,10 +155,10 @@ export function Cupcake2048() {
     if (direction && !gameOver) {
       const { newGrid, moved, score: moveScore } = moveGrid(grid, direction);
       if (moved) {
-        addRandomTile(newGrid);
-        setGrid(newGrid);
+        const gridWithNewTile = addRandomTile(newGrid);
+        setGrid(gridWithNewTile);
         setScore(prev => prev + moveScore);
-        if (isGameOver(newGrid)) {
+        if (isGameOver(gridWithNewTile)) {
             setGameOver(true);
         }
       }
@@ -174,6 +180,10 @@ export function Cupcake2048() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleKeyDown]);
+  
+  if (!isClient) {
+    return null; // or a loading skeleton
+  }
 
   const getTileStyle = (value: number) => {
     const hue = (value * 30) % 360;
@@ -193,7 +203,7 @@ export function Cupcake2048() {
           <div className="text-sm text-muted-foreground">SCORE</div>
           <div className="text-2xl font-bold text-primary">{score}</div>
         </div>
-        <Button onClick={handleReset}><RefreshCw className="mr-2"/> New Game</Button>
+        <Button onClick={initializeGame}><RefreshCw className="mr-2"/> New Game</Button>
       </div>
       <Card className="w-full shadow-lg p-3 sm:p-4 bg-muted/50 aspect-square relative select-none" {...swipeHandlers}>
         <CardContent className="p-0 grid grid-cols-4 gap-3 sm:gap-4 h-full w-full">
@@ -226,7 +236,7 @@ export function Cupcake2048() {
         {gameOver && (
             <div className="absolute inset-0 bg-background/80 flex flex-col items-center justify-center text-center rounded-lg">
                 <h2 className="text-4xl font-bold text-destructive">Game Over!</h2>
-                <Button onClick={handleReset} className="mt-4"><RefreshCw className="mr-2" /> Play Again</Button>
+                <Button onClick={initializeGame} className="mt-4"><RefreshCw className="mr-2" /> Play Again</Button>
             </div>
         )}
       </Card>
