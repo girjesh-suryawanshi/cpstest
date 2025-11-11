@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup, SidebarGroupLabel, SidebarContent } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks } from 'lucide-react';
+import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'ClickTrack',
@@ -261,6 +261,20 @@ export default function RootLayout({
                         <Link href="/math-quiz">
                           <GraduationCap />
                           Math Quiz
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                 </SidebarMenu>
+               </SidebarGroup>
+
+               <SidebarGroup>
+                <SidebarGroupLabel className="flex items-center gap-2"><Languages /> Language</SidebarGroupLabel>
+                 <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/word-scramble">
+                          <Languages />
+                          Word Scramble
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -174,6 +174,15 @@ export default function Home() {
               title="Math Quiz"
               description="Test your arithmetic skills."
             />
+        </GameCategory>
+
+        <GameCategory title="Language" icon={<Languages className="w-8 h-8" />}>
+          <GameCard
+            href="/word-scramble"
+            icon={<Languages className="w-8 h-8 text-primary" />}
+            title="Word Scramble"
+            description="Unscramble letters to find the word."
+          />
         </GameCategory>
         
         <GameCategory title="Creative" icon={<Paintbrush className="w-8 h-8" />}>
