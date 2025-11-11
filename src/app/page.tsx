@@ -113,6 +113,12 @@ export default function Home() {
             title="Sequence Memory"
             description="Memorize and repeat the sequence."
           />
+           <GameCard
+            href="/chimp-test"
+            icon={<Brain className="w-8 h-8 text-primary" />}
+            title="Chimp Test"
+            description="Are you smarter than a chimpanzee?"
+          />
           <GameCard
             href="/verbal-memory-test"
             icon={<MessageSquare className="w-8 h-8 text-primary" />}

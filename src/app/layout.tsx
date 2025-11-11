@@ -182,6 +182,14 @@ export default function RootLayout({
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                   <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/chimp-test">
+                        <Brain />
+                        Chimp Test
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link href="/verbal-memory-test">
