@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Zap, HomeIcon, Wind, Target, Keyboard, Type } from 'lucide-react';
+import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'ClickTrack',
@@ -79,6 +79,30 @@ export default function RootLayout({
                   <Link href="/typing-test">
                     <Type />
                     Typing Test
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/reaction-time-test">
+                    <Timer />
+                    Reaction Time Test
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+               <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/stimulation-clicker">
+                    <Keyboard />
+                    Stimulation Clicker
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/coreball-game">
+                    <Disc />
+                    Coreball Game
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
