@@ -60,11 +60,14 @@ export function AimTrainer() {
     setScore(prev => prev + 1);
     setTargets(prev => prev.filter(t => t.id !== targetId));
     setTimeout(() => {
-        setTargets(prev => [...prev, createTarget()]);
-        // Add another target to increase difficulty
-        if(score > 10 && prev.length < 3){
-            setTargets(prev => [...prev, createTarget()]);
-        }
+        setTargets(prev => {
+            const newTargets = [...prev, createTarget()];
+             // Add another target to increase difficulty
+            if(score > 10 && newTargets.length < 3){
+                return [...newTargets, createTarget()];
+            }
+            return newTargets;
+        });
     }, 100); // Small delay before new target appears
   };
 
