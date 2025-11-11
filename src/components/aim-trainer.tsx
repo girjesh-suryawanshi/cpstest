@@ -47,7 +47,7 @@ export function AimTrainer() {
 
   const createTarget = (): Target => {
     return {
-      id: Date.now(),
+      id: Date.now() + Math.random(),
       x: Math.random() * 90 + 5, // % from 5% to 95%
       y: Math.random() * 90 + 5, // % from 5% to 95%
       size: Math.random() * 30 + 30, // px from 30px to 60px
@@ -57,13 +57,17 @@ export function AimTrainer() {
   const handleTargetClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, targetId: number) => {
     e.stopPropagation();
     if (gameState !== 'running') return;
-    setScore(prev => prev + 1);
+    
+    const newScore = score + 1;
+    setScore(newScore);
+
     setTargets(prev => prev.filter(t => t.id !== targetId));
+
     setTimeout(() => {
         setTargets(prev => {
             const newTargets = [...prev, createTarget()];
              // Add another target to increase difficulty
-            if(score > 10 && newTargets.length < 3){
+            if(newScore > 10 && newTargets.length < 3){
                 return [...newTargets, createTarget()];
             }
             return newTargets;
