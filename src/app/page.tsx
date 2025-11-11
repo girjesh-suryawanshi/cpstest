@@ -1,6 +1,17 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Zap, Hand, Target, Wind, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, Cupcake } from "lucide-react";
+import { Zap, Hand, Target, Wind, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit } from "lucide-react";
 import Link from "next/link";
+
+const CupcakeIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M18.5 9.5a2.5 2.5 0 0 0-4-3.26A2.5 2.5 0 0 0 9.5 9.5" />
+    <path d="M12 15a6 6 0 0 0-6 6h12a6 6 0 0 0-6-6Z" />
+    <path d="M12 9.5V15" />
+    <path d="M12 21v-3" />
+    <path d="m9 18 1.5-1.5" />
+    <path d="m15 18-1.5-1.5" />
+  </svg>
+);
 
 export default function Home() {
   return (
@@ -75,7 +86,7 @@ export default function Home() {
         />
          <GameCard
           href="/cupcake-2048"
-          icon={<Cupcake className="w-8 h-8 text-primary" />}
+          icon={<CupcakeIcon className="w-8 h-8 text-primary" />}
           title="Cupcake 2048"
           description="A delicious puzzle game."
         />
