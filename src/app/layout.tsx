@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'ClickTrack',
-  description: 'Test your clicks per second with ClickTrack.',
+  title: 'CpsSpeedTest',
+  description: 'Test your clicks per second with CpsSpeedTest.',
 };
 
 const CupcakeIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -45,7 +45,7 @@ export default function RootLayout({
               <div className="flex items-center gap-3 p-2">
                 <Zap className="h-8 w-8 text-primary"/>
                 <h1 className="text-2xl font-bold text-foreground">
-                  ClickTrack
+                  CpsSpeedTest
                 </h1>
               </div>
             </SidebarHeader>
@@ -325,7 +325,7 @@ export default function RootLayout({
               <header className="flex h-12 items-center justify-between border-b bg-background/50 px-4 md:hidden">
                 <Link href="/" className="flex items-center gap-2">
                     <Zap className="h-6 w-6 text-primary" />
-                    <span className="font-bold">ClickTrack</span>
+                    <span className="font-bold">CpsSpeedTest</span>
                 </Link>
                 <SidebarTrigger />
               </header>
@@ -335,7 +335,7 @@ export default function RootLayout({
               <footer className="mt-auto border-t bg-background/50">
                 <div className="container mx-auto flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
                   <p className="text-sm text-muted-foreground">
-                    &copy; {new Date().getFullYear()} ClickTrack. All rights reserved.
+                    &copy; {new Date().getFullYear()} CpsSpeedTest. All rights reserved.
                   </p>
                   <nav className="flex items-center gap-4 sm:gap-6">
                     <Link href="/about" className="text-sm hover:underline">

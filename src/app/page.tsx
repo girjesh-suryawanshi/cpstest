@@ -23,7 +23,7 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center p-4 sm:p-8 md:p-12">
       <header className="w-full max-w-4xl mx-auto mb-12 text-center">
         <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl">
-          Welcome to ClickTrack
+          Welcome to CpsSpeedTest
         </h1>
         <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">Your one-stop destination for click speed tests, reaction challenges, and other fun skill-based games.</p>
       </header>
