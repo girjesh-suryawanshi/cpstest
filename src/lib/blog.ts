@@ -13,7 +13,7 @@ export const allPosts: Post[] = [
         slug: 'cps-test-ultimate-guide',
         title: cpsTestPost.title,
         description: cpsTestPost.description,
-        date: cpsTestPost.date,
+        date: '2024-07-29',
         content: cpsTestPost.default,
     },
 ];
@@ -22,6 +22,6 @@ export const postMetas = {
     'cps-test-ultimate-guide': {
         title: cpsTestPost.title,
         description: cpsTestPost.description,
-        date: cpsTestPost.date,
+        date: '2024-07-29',
     }
 }
