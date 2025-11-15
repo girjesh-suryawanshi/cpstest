@@ -7,6 +7,7 @@ import SpacebarTestGuide, { frontmatter as SpacebarTestFrontmatter } from '@/app
 import StimulationClickerGuide, { frontmatter as StimulationClickerFrontmatter } from '@/app/blog/content/stimulation-clicker-guide.mdx';
 import TypingTestGuide, { frontmatter as TypingTestFrontmatter } from '@/app/blog/content/typing-test-guide.mdx';
 import CoreballGameGuide, { frontmatter as CoreballGameFrontmatter } from '@/app/blog/content/coreball-game-guide.mdx';
+import Cupcake2048Guide, { frontmatter as Cupcake2048Frontmatter } from '@/app/blog/content/cupcake-2048-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -61,6 +62,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: CoreballGameFrontmatter.title,
         description: CoreballGameFrontmatter.description,
         date: '2024-08-06',
+    },
+    'cupcake-2048-guide': {
+        title: Cupcake2048Frontmatter.title,
+        description: Cupcake2048Frontmatter.description,
+        date: '2024-08-07',
     }
 };
 
@@ -127,5 +133,12 @@ export const allPosts: Post[] = [
         description: postMetas['coreball-game-guide'].description,
         date: postMetas['coreball-game-guide'].date,
         content: CoreballGameGuide,
+    },
+    {
+        slug: 'cupcake-2048-guide',
+        title: postMetas['cupcake-2048-guide'].title,
+        description: postMetas['cupcake-2048-guide'].description,
+        date: postMetas['cupcake-2048-guide'].date,
+        content: Cupcake2048Guide,
     },
 ];
