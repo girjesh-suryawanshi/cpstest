@@ -22,6 +22,7 @@ import WordMemoryTestGuide, { frontmatter as WordMemoryTestFrontmatter } from '@
 import MathQuizGuide, { frontmatter as MathQuizFrontmatter } from '@/app/blog/content/math-quiz-guide.mdx';
 import WordScrambleGuide, { frontmatter as WordScrambleFrontmatter } from '@/app/blog/content/word-scramble-guide.mdx';
 import DrawingPadGuide, { frontmatter as DrawingPadFrontmatter } from '@/app/blog/content/drawing-pad-guide.mdx';
+import BlockBuilderGuide, { frontmatter as BlockBuilderFrontmatter } from '@/app/blog/content/block-builder-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -146,6 +147,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: DrawingPadFrontmatter.title,
         description: DrawingPadFrontmatter.description,
         date: '2024-08-20',
+    },
+    'block-builder-guide': {
+        title: BlockBuilderFrontmatter.title,
+        description: BlockBuilderFrontmatter.description,
+        date: '2024-08-21',
     }
 };
 
@@ -310,5 +316,12 @@ export const allPosts: Post[] = [
         description: postMetas['drawing-pad-guide'].description,
         date: postMetas['drawing-pad-guide'].date,
         content: DrawingPadGuide,
+    },
+    {
+        slug: 'block-builder-guide',
+        title: postMetas['block-builder-guide'].title,
+        description: postMetas['block-builder-guide'].description,
+        date: postMetas['block-builder-guide'].date,
+        content: BlockBuilderGuide,
     },
 ];
