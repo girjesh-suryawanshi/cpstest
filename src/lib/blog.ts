@@ -12,6 +12,7 @@ import JigsawPuzzleGuide, { frontmatter as JigsawPuzzleFrontmatter } from '@/app
 import SlidingPuzzleGuide, { frontmatter as SlidingPuzzleFrontmatter } from '@/app/blog/content/sliding-puzzle-guide.mdx';
 import ReactionTimeTestGuide, { frontmatter as ReactionTimeTestFrontmatter } from '@/app/blog/content/reaction-time-test-guide.mdx';
 import MemoryGameGuide, { frontmatter as MemoryGameFrontmatter } from '@/app/blog/content/memory-game-guide.mdx';
+import NumberMemoryTestGuide, { frontmatter as NumberMemoryTestFrontmatter } from '@/app/blog/content/number-memory-test-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -91,6 +92,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: MemoryGameFrontmatter.title,
         description: MemoryGameFrontmatter.description,
         date: '2024-08-11',
+    },
+    'number-memory-test-guide': {
+        title: NumberMemoryTestFrontmatter.title,
+        description: NumberMemoryTestFrontmatter.description,
+        date: '2024-08-12',
     }
 };
 
@@ -192,5 +198,12 @@ export const allPosts: Post[] = [
         description: postMetas['memory-game-guide'].description,
         date: postMetas['memory-game-guide'].date,
         content: MemoryGameGuide,
+    },
+    {
+        slug: 'number-memory-test-guide',
+        title: postMetas['number-memory-test-guide'].title,
+        description: postMetas['number-memory-test-guide'].description,
+        date: postMetas['number-memory-test-guide'].date,
+        content: NumberMemoryTestGuide,
     },
 ];
