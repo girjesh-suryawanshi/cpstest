@@ -2,6 +2,7 @@ import CpsTestUltimateGuide, { frontmatter as CpsTestFrontmatter } from '@/app/b
 import JitterClickTestGuide, { frontmatter as JitterClickFrontmatter } from '@/app/blog/content/jitter-click-test-guide.mdx';
 import KohiClickTestGuide, { frontmatter as KohiClickFrontmatter } from '@/app/blog/content/kohi-click-test-guide.mdx';
 import ButterflyClickTestGuide, { frontmatter as ButterflyClickFrontmatter } from '@/app/blog/content/butterfly-click-test-guide.mdx';
+import AimTrainerGuide, { frontmatter as AimTrainerFrontmatter } from '@/app/blog/content/aim-trainer-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -31,6 +32,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: ButterflyClickFrontmatter.title,
         description: ButterflyClickFrontmatter.description,
         date: '2024-08-01',
+    },
+    'aim-trainer-guide': {
+        title: AimTrainerFrontmatter.title,
+        description: AimTrainerFrontmatter.description,
+        date: '2024-08-02',
     }
 };
 
@@ -62,5 +68,12 @@ export const allPosts: Post[] = [
         description: postMetas['butterfly-click-test-guide'].description,
         date: postMetas['butterfly-click-test-guide'].date,
         content: ButterflyClickTestGuide,
+    },
+    {
+        slug: 'aim-trainer-guide',
+        title: postMetas['aim-trainer-guide'].title,
+        description: postMetas['aim-trainer-guide'].description,
+        date: postMetas['aim-trainer-guide'].date,
+        content: AimTrainerGuide,
     },
 ];
