@@ -5,9 +5,55 @@ import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, 
 import Link from 'next/link';
 import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2, Rss } from 'lucide-react';
 
+const siteUrl = 'https://www.cpssprint.com'; // Replace with your actual domain
+
 export const metadata: Metadata = {
-  title: 'CpsSpeedTest',
-  description: 'Test your clicks per second with CpsSpeedTest.',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'CpsSpeedTest - The Ultimate Skill Gaming Hub',
+    template: '%s | CpsSpeedTest',
+  },
+  description: 'Test and improve your clicking speed, reaction time, typing skills, and cognitive abilities with our collection of fun and challenging browser-based games.',
+  keywords: ['cps test', 'click speed test', 'reaction time', 'typing test', 'aim trainer', 'memory game', 'skill games', 'online games'],
+  openGraph: {
+    title: {
+        default: 'CpsSpeedTest - The Ultimate Skill Gaming Hub',
+        template: '%s | CpsSpeedTest',
+    },
+    description: 'Challenge yourself with a variety of skill-based games designed to test your limits and improve your performance.',
+    url: siteUrl,
+    siteName: 'CpsSpeedTest',
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`, // You should create this image
+        width: 1200,
+        height: 630,
+        alt: 'CpsSpeedTest - Fun Skill-Based Games',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: {
+        default: 'CpsSpeedTest - The Ultimate Skill Gaming Hub',
+        template: '%s | CpsSpeedTest',
+    },
+    description: 'Test your clicking speed, reaction time, and more with our fun browser games.',
+    images: [`${siteUrl}/og-image.png`], // You should create this image
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 const CupcakeIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -37,6 +83,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": siteUrl,
+            "name": "CpsSpeedTest",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": `${siteUrl}/search?q={search_term_string}`,
+              "query-input": "required name=search_term_string"
+            }
+          }) }}
+        />
       </head>
       <body className="antialiased">
         <SidebarProvider>
