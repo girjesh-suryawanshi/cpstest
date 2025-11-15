@@ -5,6 +5,7 @@ import ButterflyClickTestGuide, { frontmatter as ButterflyClickFrontmatter } fro
 import AimTrainerGuide, { frontmatter as AimTrainerFrontmatter } from '@/app/blog/content/aim-trainer-guide.mdx';
 import SpacebarTestGuide, { frontmatter as SpacebarTestFrontmatter } from '@/app/blog/content/spacebar-test-guide.mdx';
 import StimulationClickerGuide, { frontmatter as StimulationClickerFrontmatter } from '@/app/blog/content/stimulation-clicker-guide.mdx';
+import TypingTestGuide, { frontmatter as TypingTestFrontmatter } from '@/app/blog/content/typing-test-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -49,6 +50,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: StimulationClickerFrontmatter.title,
         description: StimulationClickerFrontmatter.description,
         date: '2024-08-04',
+    },
+    'typing-test-guide': {
+        title: TypingTestFrontmatter.title,
+        description: TypingTestFrontmatter.description,
+        date: '2024-08-05',
     }
 };
 
@@ -101,5 +107,12 @@ export const allPosts: Post[] = [
         description: postMetas['stimulation-clicker-guide'].description,
         date: postMetas['stimulation-clicker-guide'].date,
         content: StimulationClickerGuide,
+    },
+    {
+        slug: 'typing-test-guide',
+        title: postMetas['typing-test-guide'].title,
+        description: postMetas['typing-test-guide'].description,
+        date: postMetas['typing-test-guide'].date,
+        content: TypingTestGuide,
     },
 ];
