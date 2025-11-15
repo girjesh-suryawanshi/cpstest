@@ -6,6 +6,7 @@ import AimTrainerGuide, { frontmatter as AimTrainerFrontmatter } from '@/app/blo
 import SpacebarTestGuide, { frontmatter as SpacebarTestFrontmatter } from '@/app/blog/content/spacebar-test-guide.mdx';
 import StimulationClickerGuide, { frontmatter as StimulationClickerFrontmatter } from '@/app/blog/content/stimulation-clicker-guide.mdx';
 import TypingTestGuide, { frontmatter as TypingTestFrontmatter } from '@/app/blog/content/typing-test-guide.mdx';
+import CoreballGameGuide, { frontmatter as CoreballGameFrontmatter } from '@/app/blog/content/coreball-game-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -55,6 +56,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: TypingTestFrontmatter.title,
         description: TypingTestFrontmatter.description,
         date: '2024-08-05',
+    },
+    'coreball-game-guide': {
+        title: CoreballGameFrontmatter.title,
+        description: CoreballGameFrontmatter.description,
+        date: '2024-08-06',
     }
 };
 
@@ -114,5 +120,12 @@ export const allPosts: Post[] = [
         description: postMetas['typing-test-guide'].description,
         date: postMetas['typing-test-guide'].date,
         content: TypingTestGuide,
+    },
+    {
+        slug: 'coreball-game-guide',
+        title: postMetas['coreball-game-guide'].title,
+        description: postMetas['coreball-game-guide'].description,
+        date: postMetas['coreball-game-guide'].date,
+        content: CoreballGameGuide,
     },
 ];
