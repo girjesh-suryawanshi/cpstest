@@ -1,4 +1,5 @@
-import CpsTestUltimateGuide, { frontmatter } from '@/app/blog/content/cps-test-ultimate-guide.mdx';
+import CpsTestUltimateGuide, { frontmatter as CpsTestFrontmatter } from '@/app/blog/content/cps-test-ultimate-guide.mdx';
+import JitterClickTestGuide, { frontmatter as JitterClickFrontmatter } from '@/app/blog/content/jitter-click-test-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -10,9 +11,14 @@ export interface Post {
 
 export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
     'cps-test-ultimate-guide': {
-        title: frontmatter.title,
-        description: frontmatter.description,
+        title: CpsTestFrontmatter.title,
+        description: CpsTestFrontmatter.description,
         date: '2024-07-29',
+    },
+    'jitter-click-test-guide': {
+        title: JitterClickFrontmatter.title,
+        description: JitterClickFrontmatter.description,
+        date: '2024-07-30',
     }
 };
 
@@ -23,5 +29,12 @@ export const allPosts: Post[] = [
         description: postMetas['cps-test-ultimate-guide'].description,
         date: postMetas['cps-test-ultimate-guide'].date,
         content: CpsTestUltimateGuide,
+    },
+    {
+        slug: 'jitter-click-test-guide',
+        title: postMetas['jitter-click-test-guide'].title,
+        description: postMetas['jitter-click-test-guide'].description,
+        date: postMetas['jitter-click-test-guide'].date,
+        content: JitterClickTestGuide,
     },
 ];
