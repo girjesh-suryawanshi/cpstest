@@ -1,5 +1,7 @@
 import CpsTestUltimateGuide, { frontmatter as CpsTestFrontmatter } from '@/app/blog/content/cps-test-ultimate-guide.mdx';
 import JitterClickTestGuide, { frontmatter as JitterClickFrontmatter } from '@/app/blog/content/jitter-click-test-guide.mdx';
+import KohiClickTestGuide, { frontmatter as KohiClickFrontmatter } from '@/app/blog/content/kohi-click-test-guide.mdx';
+import ButterflyClickTestGuide, { frontmatter as ButterflyClickFrontmatter } from '@/app/blog/content/butterfly-click-test-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -19,6 +21,16 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: JitterClickFrontmatter.title,
         description: JitterClickFrontmatter.description,
         date: '2024-07-30',
+    },
+    'kohi-click-test-guide': {
+        title: KohiClickFrontmatter.title,
+        description: KohiClickFrontmatter.description,
+        date: '2024-07-31',
+    },
+    'butterfly-click-test-guide': {
+        title: ButterflyClickFrontmatter.title,
+        description: ButterflyClickFrontmatter.description,
+        date: '2024-08-01',
     }
 };
 
@@ -36,5 +48,19 @@ export const allPosts: Post[] = [
         description: postMetas['jitter-click-test-guide'].description,
         date: postMetas['jitter-click-test-guide'].date,
         content: JitterClickTestGuide,
+    },
+    {
+        slug: 'kohi-click-test-guide',
+        title: postMetas['kohi-click-test-guide'].title,
+        description: postMetas['kohi-click-test-guide'].description,
+        date: postMetas['kohi-click-test-guide'].date,
+        content: KohiClickTestGuide,
+    },
+    {
+        slug: 'butterfly-click-test-guide',
+        title: postMetas['butterfly-click-test-guide'].title,
+        description: postMetas['butterfly-click-test-guide'].description,
+        date: postMetas['butterfly-click-test-guide'].date,
+        content: ButterflyClickTestGuide,
     },
 ];
