@@ -1,4 +1,5 @@
 import { CpsTest } from "@/components/cps-test";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function KohiClickTestPage() {
   return (
@@ -8,10 +9,20 @@ export default function KohiClickTestPage() {
           Kohi Click Test
         </h1>
         <p className="text-muted-foreground mt-1">
-          The classic 10 second clicking challenge.
+          The classic 10 second clicking challenge, made famous by the Minecraft community.
         </p>
       </header>
       <CpsTest gameDuration={10} />
-    </div>
-  );
-}
+      <Card className="w-full max-w-2xl mt-8">
+        <CardContent className="p-6 space-y-4">
+            <h2 className="text-2xl font-semibold">About the Kohi Click Test</h2>
+            <p>The Kohi Click Test is a legendary benchmark for clicking speed, originally popularized by players of the Kohi Minecraft server. It's a straightforward 10-second challenge to see how many clicks you can achieve, measuring your raw CPS (clicks per second). For many gamers, a high score on the Kohi test is a badge of honor, demonstrating elite mouse control and speed essential for PvP (Player vs. Player) combat.</p>
+
+            <h2 className="text-2xl font-semibold">How to Play</h2>
+            <ol className="list-decimal list-inside space-y-2">
+                <li>Prepare yourself for a 10-second sprint. Place your hand comfortably on your mouse.</li>
+                <li>Click the "Start Test" button. A countdown will begin.</li>
+                <li>Once the test area appears, click as fast as you can within the box.</li>
+                <li>The test automatically stops after 10 seconds.</li>
+                <li>Your final score, displaying your CPS, will be shown. Use the chart to see your click consistency and try again to set a new personal best!</li>
+            </ol>
