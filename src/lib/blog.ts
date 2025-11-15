@@ -1,4 +1,4 @@
-import cpsTestPost from '@/app/blog/content/cps-test-ultimate-guide.mdx';
+import CpsTestUltimateGuide, { frontmatter } from '@/app/blog/content/cps-test-ultimate-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -8,20 +8,20 @@ export interface Post {
     content: React.ComponentType;
 }
 
+export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
+    'cps-test-ultimate-guide': {
+        title: frontmatter.title,
+        description: frontmatter.description,
+        date: '2024-07-29',
+    }
+};
+
 export const allPosts: Post[] = [
     {
         slug: 'cps-test-ultimate-guide',
-        title: cpsTestPost.title,
-        description: cpsTestPost.description,
-        date: '2024-07-29',
-        content: cpsTestPost.default,
+        title: postMetas['cps-test-ultimate-guide'].title,
+        description: postMetas['cps-test-ultimate-guide'].description,
+        date: postMetas['cps-test-ultimate-guide'].date,
+        content: CpsTestUltimateGuide,
     },
 ];
-
-export const postMetas = {
-    'cps-test-ultimate-guide': {
-        title: cpsTestPost.title,
-        description: cpsTestPost.description,
-        date: '2024-07-29',
-    }
-}
