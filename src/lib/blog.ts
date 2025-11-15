@@ -20,6 +20,7 @@ import VerbalMemoryTestGuide, { frontmatter as VerbalMemoryTestFrontmatter } fro
 import VisualMemoryTestGuide, { frontmatter as VisualMemoryTestFrontmatter } from '@/app/blog/content/visual-memory-test-guide.mdx';
 import WordMemoryTestGuide, { frontmatter as WordMemoryTestFrontmatter } from '@/app/blog/content/word-memory-test-guide.mdx';
 import MathQuizGuide, { frontmatter as MathQuizFrontmatter } from '@/app/blog/content/math-quiz-guide.mdx';
+import WordScrambleGuide, { frontmatter as WordScrambleFrontmatter } from '@/app/blog/content/word-scramble-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -134,6 +135,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: MathQuizFrontmatter.title,
         description: MathQuizFrontmatter.description,
         date: '2024-08-18',
+    },
+    'word-scramble-guide': {
+        title: WordScrambleFrontmatter.title,
+        description: WordScrambleFrontmatter.description,
+        date: '2024-08-19',
     }
 };
 
@@ -284,5 +290,12 @@ export const allPosts: Post[] = [
         description: postMetas['math-quiz-guide'].description,
         date: postMetas['math-quiz-guide'].date,
         content: MathQuizGuide,
+    },
+    {
+        slug: 'word-scramble-guide',
+        title: postMetas['word-scramble-guide'].title,
+        description: postMetas['word-scramble-guide'].description,
+        date: postMetas['word-scramble-guide'].date,
+        content: WordScrambleGuide,
     },
 ];
