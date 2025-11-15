@@ -15,6 +15,7 @@ import ReactionTimeTestGuide, { frontmatter as ReactionTimeTestFrontmatter } fro
 import MemoryGameGuide, { frontmatter as MemoryGameFrontmatter } from '@/app/blog/content/memory-game-guide.mdx';
 import NumberMemoryTestGuide, { frontmatter as NumberMemoryTestFrontmatter } from '@/app/blog/content/number-memory-test-guide.mdx';
 import SequenceMemoryTestGuide, { frontmatter as SequenceMemoryTestFrontmatter } from '@/app/blog/content/sequence-memory-test-guide.mdx';
+import ChimpTestGuide, { frontmatter as ChimpTestFrontmatter } from '@/app/blog/content/chimp-test-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -104,6 +105,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: SequenceMemoryTestFrontmatter.title,
         description: SequenceMemoryTestFrontmatter.description,
         date: '2024-08-13',
+    },
+    'chimp-test-guide': {
+        title: ChimpTestFrontmatter.title,
+        description: ChimpTestFrontmatter.description,
+        date: '2024-08-14',
     }
 };
 
@@ -219,5 +225,12 @@ export const allPosts: Post[] = [
         description: postMetas['sequence-memory-test-guide'].description,
         date: postMetas['sequence-memory-test-guide'].date,
         content: SequenceMemoryTestGuide,
+    },
+    {
+        slug: 'chimp-test-guide',
+        title: postMetas['chimp-test-guide'].title,
+        description: postMetas['chimp-test-guide'].description,
+        date: postMetas['chimp-test-guide'].date,
+        content: ChimpTestGuide,
     },
 ];
