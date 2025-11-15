@@ -63,7 +63,7 @@ export default function ButterflyClickTestPage() {
                   <li>Click the "Start Test" button to begin the countdown.</li>
                   <li>When the test area appears, start rapidly alternating clicks with both fingers on the button.</li>
                   <li>Continue this motion for the full 20 seconds until the timer runs out.</li>
-                  <li>Your final CPS score will be displayed. Analyze your performance and try again to improve your speed and rhythm!</li>
+                  <li>Your final score will be displayed. Analyze your performance and try again to improve your speed and rhythm!</li>
               </ol>
           </CardContent>
         </Card>
