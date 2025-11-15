@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup, SidebarGroupLabel, SidebarContent } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2 } from 'lucide-react';
+import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2, Rss } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'CpsSpeedTest',
@@ -56,6 +56,14 @@ export default function RootLayout({
                     <Link href="/">
                       <HomeIcon />
                       Home
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link href="/blog">
+                      <Rss />
+                      Blog
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -340,6 +348,9 @@ export default function RootLayout({
                   <nav className="flex items-center gap-4 sm:gap-6">
                     <Link href="/about" className="text-sm hover:underline">
                       About Us
+                    </Link>
+                     <Link href="/blog" className="text-sm hover:underline">
+                      Blog
                     </Link>
                     <Link href="/privacy" className="text-sm hover:underline">
                       Privacy Policy
