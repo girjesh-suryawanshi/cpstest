@@ -23,6 +23,7 @@ import MathQuizGuide, { frontmatter as MathQuizFrontmatter } from '@/app/blog/co
 import WordScrambleGuide, { frontmatter as WordScrambleFrontmatter } from '@/app/blog/content/word-scramble-guide.mdx';
 import DrawingPadGuide, { frontmatter as DrawingPadFrontmatter } from '@/app/blog/content/drawing-pad-guide.mdx';
 import BlockBuilderGuide, { frontmatter as BlockBuilderFrontmatter } from '@/app/blog/content/block-builder-guide.mdx';
+import ConnectTheDotsGuide, { frontmatter as ConnectTheDotsFrontmatter } from '@/app/blog/content/connect-the-dots-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -152,6 +153,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: BlockBuilderFrontmatter.title,
         description: BlockBuilderFrontmatter.description,
         date: '2024-08-21',
+    },
+    'connect-the-dots-guide': {
+        title: ConnectTheDotsFrontmatter.title,
+        description: ConnectTheDotsFrontmatter.description,
+        date: '2024-08-22',
     }
 };
 
@@ -323,5 +329,12 @@ export const allPosts: Post[] = [
         description: postMetas['block-builder-guide'].description,
         date: postMetas['block-builder-guide'].date,
         content: BlockBuilderGuide,
+    },
+    {
+        slug: 'connect-the-dots-guide',
+        title: postMetas['connect-the-dots-guide'].title,
+        description: postMetas['connect-the-dots-guide'].description,
+        date: postMetas['connect-the-dots-guide'].date,
+        content: ConnectTheDotsGuide,
     },
 ];
