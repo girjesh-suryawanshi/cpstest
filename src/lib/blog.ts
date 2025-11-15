@@ -3,6 +3,7 @@ import JitterClickTestGuide, { frontmatter as JitterClickFrontmatter } from '@/a
 import KohiClickTestGuide, { frontmatter as KohiClickFrontmatter } from '@/app/blog/content/kohi-click-test-guide.mdx';
 import ButterflyClickTestGuide, { frontmatter as ButterflyClickFrontmatter } from '@/app/blog/content/butterfly-click-test-guide.mdx';
 import AimTrainerGuide, { frontmatter as AimTrainerFrontmatter } from '@/app/blog/content/aim-trainer-guide.mdx';
+import SpacebarTestGuide, { frontmatter as SpacebarTestFrontmatter } from '@/app/blog/content/spacebar-test-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -37,6 +38,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: AimTrainerFrontmatter.title,
         description: AimTrainerFrontmatter.description,
         date: '2024-08-02',
+    },
+    'spacebar-test-guide': {
+        title: SpacebarTestFrontmatter.title,
+        description: SpacebarTestFrontmatter.description,
+        date: '2024-08-03',
     }
 };
 
@@ -75,5 +81,12 @@ export const allPosts: Post[] = [
         description: postMetas['aim-trainer-guide'].description,
         date: postMetas['aim-trainer-guide'].date,
         content: AimTrainerGuide,
+    },
+    {
+        slug: 'spacebar-test-guide',
+        title: postMetas['spacebar-test-guide'].title,
+        description: postMetas['spacebar-test-guide'].description,
+        date: postMetas['spacebar-test-guide'].date,
+        content: SpacebarTestGuide,
     },
 ];
