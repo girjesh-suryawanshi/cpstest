@@ -10,6 +10,7 @@ import CoreballGameGuide, { frontmatter as CoreballGameFrontmatter } from '@/app
 import Cupcake2048Guide, { frontmatter as Cupcake2048Frontmatter } from '@/app/blog/content/cupcake-2048-guide.mdx';
 import JigsawPuzzleGuide, { frontmatter as JigsawPuzzleFrontmatter } from '@/app/blog/content/jigsaw-puzzle-guide.mdx';
 import SlidingPuzzleGuide, { frontmatter as SlidingPuzzleFrontmatter } from '@/app/blog/content/sliding-puzzle-guide.mdx';
+import ReactionTimeTestGuide, { frontmatter as ReactionTimeTestFrontmatter } from '@/app/blog/content/reaction-time-test-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -79,6 +80,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: SlidingPuzzleFrontmatter.title,
         description: SlidingPuzzleFrontmatter.description,
         date: '2024-08-09',
+    },
+    'reaction-time-test-guide': {
+        title: ReactionTimeTestFrontmatter.title,
+        description: ReactionTimeTestFrontmatter.description,
+        date: '2024-08-10',
     }
 };
 
@@ -166,5 +172,12 @@ export const allPosts: Post[] = [
         description: postMetas['sliding-puzzle-guide'].description,
         date: postMetas['sliding-puzzle-guide'].date,
         content: SlidingPuzzleGuide,
+    },
+    {
+        slug: 'reaction-time-test-guide',
+        title: postMetas['reaction-time-test-guide'].title,
+        description: postMetas['reaction-time-test-guide'].description,
+        date: postMetas['reaction-time-test-guide'].date,
+        content: ReactionTimeTestGuide,
     },
 ];
