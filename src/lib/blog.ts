@@ -9,6 +9,7 @@ import TypingTestGuide, { frontmatter as TypingTestFrontmatter } from '@/app/blo
 import CoreballGameGuide, { frontmatter as CoreballGameFrontmatter } from '@/app/blog/content/coreball-game-guide.mdx';
 import Cupcake2048Guide, { frontmatter as Cupcake2048Frontmatter } from '@/app/blog/content/cupcake-2048-guide.mdx';
 import JigsawPuzzleGuide, { frontmatter as JigsawPuzzleFrontmatter } from '@/app/blog/content/jigsaw-puzzle-guide.mdx';
+import SlidingPuzzleGuide, { frontmatter as SlidingPuzzleFrontmatter } from '@/app/blog/content/sliding-puzzle-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -73,6 +74,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: JigsawPuzzleFrontmatter.title,
         description: JigsawPuzzleFrontmatter.description,
         date: '2024-08-08',
+    },
+    'sliding-puzzle-guide': {
+        title: SlidingPuzzleFrontmatter.title,
+        description: SlidingPuzzleFrontmatter.description,
+        date: '2024-08-09',
     }
 };
 
@@ -153,5 +159,12 @@ export const allPosts: Post[] = [
         description: postMetas['jigsaw-puzzle-guide'].description,
         date: postMetas['jigsaw-puzzle-guide'].date,
         content: JigsawPuzzleGuide,
+    },
+    {
+        slug: 'sliding-puzzle-guide',
+        title: postMetas['sliding-puzzle-guide'].title,
+        description: postMetas['sliding-puzzle-guide'].description,
+        date: postMetas['sliding-puzzle-guide'].date,
+        content: SlidingPuzzleGuide,
     },
 ];
