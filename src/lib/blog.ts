@@ -4,6 +4,7 @@ import KohiClickTestGuide, { frontmatter as KohiClickFrontmatter } from '@/app/b
 import ButterflyClickTestGuide, { frontmatter as ButterflyClickFrontmatter } from '@/app/blog/content/butterfly-click-test-guide.mdx';
 import AimTrainerGuide, { frontmatter as AimTrainerFrontmatter } from '@/app/blog/content/aim-trainer-guide.mdx';
 import SpacebarTestGuide, { frontmatter as SpacebarTestFrontmatter } from '@/app/blog/content/spacebar-test-guide.mdx';
+import StimulationClickerGuide, { frontmatter as StimulationClickerFrontmatter } from '@/app/blog/content/stimulation-clicker-guide.mdx';
 
 export interface Post {
     slug: string;
@@ -43,6 +44,11 @@ export const postMetas: Record<string, Omit<Post, 'slug' | 'content'>> = {
         title: SpacebarTestFrontmatter.title,
         description: SpacebarTestFrontmatter.description,
         date: '2024-08-03',
+    },
+    'stimulation-clicker-guide': {
+        title: StimulationClickerFrontmatter.title,
+        description: StimulationClickerFrontmatter.description,
+        date: '2024-08-04',
     }
 };
 
@@ -88,5 +94,12 @@ export const allPosts: Post[] = [
         description: postMetas['spacebar-test-guide'].description,
         date: postMetas['spacebar-test-guide'].date,
         content: SpacebarTestGuide,
+    },
+    {
+        slug: 'stimulation-clicker-guide',
+        title: postMetas['stimulation-clicker-guide'].title,
+        description: postMetas['stimulation-clicker-guide'].description,
+        date: postMetas['stimulation-clicker-guide'].date,
+        content: StimulationClickerGuide,
     },
 ];
