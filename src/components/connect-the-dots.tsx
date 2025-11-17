@@ -60,42 +60,60 @@ const levels = [
   }
 ];
 
-// Helper to determine the best position for the number label
 const getLabelPosition = (point: Point) => {
-    let x = point.x;
-    let y = point.y;
-    let textAnchor: "start" | "end" | "middle" = "start";
-    let dy = "0.3em";
+    let dx = 0;
+    let dy = 0;
+    let textAnchor: 'start' | 'end' | 'middle' = 'middle';
 
-    // Adjust position to avoid edges
-    if (point.x < 10) {
-        textAnchor = "start";
-        x += 4;
-    } else if (point.x > 90) {
-        textAnchor = "end";
-        x -= 4;
+    const offsetX = 5;
+    const offsetY = 5;
+
+    // Determine horizontal position
+    if (point.x < 15) {
+        textAnchor = 'start';
+        dx = offsetX;
+    } else if (point.x > 85) {
+        textAnchor = 'end';
+        dx = -offsetX;
     } else {
-        textAnchor = "middle";
-        if (point.y < 15) {
-             y += 6; // Move down if near top
-             dy = "0";
-        } else {
-             y -= 4; // Default to above
-             dy = "0.3em";
+        textAnchor = 'middle';
+    }
+
+    // Determine vertical position
+    if (point.y < 15) {
+        dy = offsetY;
+    } else if (point.y > 85) {
+        dy = -offsetY;
+    } else {
+        // For points in the middle, decide based on which side is clearer
+        if (point.x < 50) { // left half
+            textAnchor = 'end';
+            dx = -offsetX;
+        } else { // right half
+            textAnchor = 'start';
+            dx = offsetX;
+        }
+
+        // If it's very central horizontally, prioritize vertical placement
+        if (point.x > 40 && point.x < 60) {
+            textAnchor = 'middle';
+            dx = 0;
+            if (point.y < 50) { // top half
+                dy = -offsetY;
+            } else { // bottom half
+                dy = offsetY;
+            }
         }
     }
     
-    if (point.y < 10 && textAnchor !== 'middle') {
-        y += 4;
-        dy = "0.8em";
-    } else if (point.y > 90 && textAnchor !== 'middle') {
-        y -= 4;
-        dy = "0";
-    }
+    // Final position adjustments for text alignment
+    if (textAnchor === 'middle') dy -= 2;
+    if (textAnchor === 'start' || textAnchor === 'end') dy += 2;
 
 
-    return { x, y, textAnchor, dy };
+    return { x: point.x + dx, y: point.y + dy, textAnchor };
 };
+
 
 export function ConnectTheDots() {
   const [gameState, setGameState] = useState<GameState>('idle');
@@ -187,7 +205,7 @@ export function ConnectTheDots() {
             <svg width="100%" height="100%" viewBox="0 0 100 100">
                 {lines}
                 {currentPoints.map((point, index) => {
-                    const { x, y, textAnchor, dy } = getLabelPosition(point);
+                    const { x, y, textAnchor } = getLabelPosition(point);
                     return (
                         <g key={index} onClick={() => handleDotClick(index)} className={cn(gameState === 'playing' && 'cursor-pointer group')}>
                             <circle
@@ -212,7 +230,7 @@ export function ConnectTheDots() {
                                 <text
                                     x={`${x}%`}
                                     y={`${y}%`}
-                                    dy={dy}
+                                    dominantBaseline="middle"
                                     textAnchor={textAnchor}
                                     className={cn(
                                         "text-sm font-bold fill-muted-foreground select-none",
