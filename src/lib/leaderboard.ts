@@ -1,25 +1,36 @@
 'use server';
 
 import { db } from '@/lib/firebase/server';
-import { collection, query, orderBy, limit, addDoc, serverTimestamp, getDocs, Timestamp } from 'firebase/firestore';
+import { FieldValue } from 'firebase-admin/firestore';
 
-export interface Score {
+// Note: The Score interface from the client-side might have a `Timestamp`
+// type from the client SDK. The server-side equivalent is `FieldValue`.
+// For simplicity in this file, we'll use a more generic interface.
+export interface ScoreData {
   id?: string;
   name: string;
   score: number;
   game: string;
-  createdAt: Timestamp;
+  createdAt?: any; // Can be Timestamp or FieldValue
 }
 
-export async function getLeaderboard(game: string, take: number = 10): Promise<Score[]> {
+export async function getLeaderboard(game: string, take: number = 10): Promise<ScoreData[]> {
   try {
-    const scoresRef = collection(db, 'leaderboard');
-    const q = query(scoresRef, orderBy('score', 'desc'), limit(take));
-    const querySnapshot = await getDocs(q);
+    const scoresRef = db.collection('leaderboard');
+    // NOTE: The admin SDK query is slightly different from the client SDK
+    const q = scoresRef.where('game', '==', game).orderBy('score', 'desc').limit(take);
+    const querySnapshot = await q.get();
     
-    const scores: Score[] = [];
+    const scores: ScoreData[] = [];
     querySnapshot.forEach((doc) => {
-      scores.push({ id: doc.id, ...doc.data() } as Score);
+      const data = doc.data();
+      scores.push({
+        id: doc.id,
+        name: data.name,
+        score: data.score,
+        game: data.game,
+        createdAt: data.createdAt,
+      });
     });
     
     return scores;
@@ -29,12 +40,12 @@ export async function getLeaderboard(game: string, take: number = 10): Promise<S
   }
 }
 
-export async function addScore(score: Omit<Score, 'id' | 'createdAt'>): Promise<{id: string} | null> {
+export async function addScore(score: Omit<ScoreData, 'id' | 'createdAt'>): Promise<{id: string} | null> {
     try {
-        const scoresRef = collection(db, 'leaderboard');
-        const docRef = await addDoc(scoresRef, {
+        const scoresRef = db.collection('leaderboard');
+        const docRef = await scoresRef.add({
             ...score,
-            createdAt: serverTimestamp(),
+            createdAt: FieldValue.serverTimestamp(),
         });
         return { id: docRef.id };
     } catch (error) {
