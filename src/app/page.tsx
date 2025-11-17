@@ -26,7 +26,6 @@ const games = [
     { href: "/jitter-click-test", icon: Wind, title: "Jitter Click Test", description: "Test your jitter clicking speed." },
     { href: "/kohi-click-test", icon: Target, title: "Kohi Click Test", description: "A classic 10-second click test." },
     { href: "/butterfly-click-test", icon: ButterflyIcon, title: "Butterfly Click Test", description: "A 20-second clicking challenge." },
-    { href: "/aim-trainer", icon: Crosshair, title: "Aim Trainer", description: "Test your aiming skill and precision." },
     { href: "/spacebar-clicker", icon: Keyboard, title: "Spacebar Clicker", description: "Test your spacebar pressing speed." },
     { href: "/stimulation-clicker", icon: Keyboard, title: "Stimulation Clicker", description: "A spacebar test for stimulation." },
     { href: "/typing-test", icon: Type, title: "Typing Speed Test", description: "Check your typing words per minute." },
@@ -50,6 +49,13 @@ const games = [
     { href: "/connect-the-dots", icon: Share2, title: "Connect the Dots", description: "Reveal the hidden picture." },
 ]
 
+const clickRanks = [
+    { rank: 'Turtle', cps: '0-4 CPS', icon: '🐢' },
+    { rank: 'Rabbit', cps: '4-7 CPS', icon: '🐇' },
+    { rank: 'Cheetah', cps: '7-10 CPS', icon: '🐆' },
+    { rank: 'Falcon', cps: '10+ CPS', icon: '🦅' }
+]
+
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 bg-background text-foreground">
@@ -69,7 +75,7 @@ export default function Home() {
         </Link>
       </header>
 
-      <div className="relative w-full max-w-5xl space-y-12 z-10">
+      <div className="relative w-full max-w-6xl space-y-12 z-10">
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <FeatureCard icon={<Gauge />} title="Measure CPS" description="Get precise measurements of your clicking speed." />
             <FeatureCard icon={<MousePointerClick />} title="Improve Your Skills" description="Use our tools to enhance your gaming abilities." />
@@ -78,6 +84,41 @@ export default function Home() {
         
         <Separator className="bg-border/20"/>
         
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+                <h2 className="text-3xl font-bold mb-6">Featured Game</h2>
+                <FeaturedGameCard 
+                    href="/aim-trainer"
+                    title="Aim Trainer"
+                    description="Sharpen your precision and reflexes by clicking targets as fast as you can. Perfect for FPS warm-ups."
+                    imageUrl="https://images.unsplash.com/photo-155416812-5301a88136c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG5lb24lMjB0YXJnZXR8ZW58MHx8fHwxNzA3OTQ0NTkzfDA&ixlib=rb-4.0.3&q=80&w=1080"
+                />
+            </div>
+            <div>
+                <h2 className="text-3xl font-bold mb-6">What's Your Rank?</h2>
+                <Card className="h-full flex flex-col bg-secondary/30 border-primary/20 p-6 shadow-[0_0_20px_hsl(var(--primary)/0.1)]">
+                    <CardHeader className="p-0 mb-4">
+                        <CardTitle>Click Speed Ranks</CardTitle>
+                        <CardDescription>Find out where you stand against the competition.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1 p-0 grid grid-cols-2 gap-4">
+                       {clickRanks.map(rank => (
+                           <div key={rank.rank} className="bg-muted/50 p-3 rounded-lg text-center">
+                               <div className="text-4xl">{rank.icon}</div>
+                               <div className="font-bold mt-2">{rank.rank}</div>
+                               <div className="text-xs text-muted-foreground">{rank.cps}</div>
+                           </div>
+                       ))}
+                    </CardContent>
+                    <Link href="/cps-test" className="mt-6">
+                        <Button className="w-full">Test Your Rank</Button>
+                    </Link>
+                </Card>
+            </div>
+        </div>
+
+        <Separator className="bg-border/20"/>
+
         <div className="text-center">
              <h2 className="text-3xl font-bold">All Games</h2>
              <p className="text-muted-foreground mt-2">Explore our full suite of skill-based tests and games.</p>
@@ -140,4 +181,18 @@ function GameCard({ href, icon, title, description }: { href: string; icon: Reac
       </Card>
     </Link>
   );
+}
+
+function FeaturedGameCard({ href, title, description, imageUrl }: { href: string; title: string; description: string; imageUrl: string; }) {
+    return (
+        <Link href={href} className="group block">
+            <Card className="overflow-hidden h-full bg-secondary/30 border-primary/20 shadow-[0_0_30px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.3)] hover:-translate-y-1 transition-all duration-300">
+                <div style={{backgroundImage: `url(${imageUrl})`}} className="h-48 bg-cover bg-center transition-transform duration-300 group-hover:scale-105" />
+                <CardHeader>
+                    <CardTitle className="text-2xl group-hover:text-primary transition-colors">{title}</CardTitle>
+                    <CardDescription>{description}</CardDescription>
+                </CardHeader>
+            </Card>
+        </Link>
+    )
 }
