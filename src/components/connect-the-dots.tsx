@@ -60,6 +60,43 @@ const levels = [
   }
 ];
 
+// Helper to determine the best position for the number label
+const getLabelPosition = (point: Point) => {
+    let x = point.x;
+    let y = point.y;
+    let textAnchor: "start" | "end" | "middle" = "start";
+    let dy = "0.3em";
+
+    // Adjust position to avoid edges
+    if (point.x < 10) {
+        textAnchor = "start";
+        x += 4;
+    } else if (point.x > 90) {
+        textAnchor = "end";
+        x -= 4;
+    } else {
+        textAnchor = "middle";
+        if (point.y < 15) {
+             y += 6; // Move down if near top
+             dy = "0";
+        } else {
+             y -= 4; // Default to above
+             dy = "0.3em";
+        }
+    }
+    
+    if (point.y < 10 && textAnchor !== 'middle') {
+        y += 4;
+        dy = "0.8em";
+    } else if (point.y > 90 && textAnchor !== 'middle') {
+        y -= 4;
+        dy = "0";
+    }
+
+
+    return { x, y, textAnchor, dy };
+};
+
 export function ConnectTheDots() {
   const [gameState, setGameState] = useState<GameState>('idle');
   const [connectedCount, setConnectedCount] = useState(0);
@@ -149,42 +186,45 @@ export function ConnectTheDots() {
           <div className="w-full aspect-square relative">
             <svg width="100%" height="100%" viewBox="0 0 100 100">
                 {lines}
-                {currentPoints.map((point, index) => (
-                    <g key={index} onClick={() => handleDotClick(index)} className={cn(gameState === 'playing' && 'cursor-pointer group')}>
-                        <circle
-                            cx={`${point.x}%`}
-                            cy={`${point.y}%`}
-                            r="6"
-                            className={cn(
-                                "fill-transparent group-hover:fill-primary/20",
-                            )}
-                        />
-                        <circle
-                            cx={`${point.x}%`}
-                            cy={`${point.y}%`}
-                            r="2"
-                            className={cn(
-                                "transition-colors",
-                                index < connectedCount ? "fill-primary" : "fill-muted-foreground",
-                                index === connectedCount && gameState === 'playing' && "fill-primary animate-pulse"
-                            )}
-                        />
-                        {gameState !== 'finished' && (
-                             <text
-                                x={point.x > 50 ? `${point.x - 4}%` : `${point.x + 4}%`}
-                                y={`${point.y}%`}
-                                dy="0.3em"
-                                textAnchor={point.x > 50 ? "end" : "start"}
+                {currentPoints.map((point, index) => {
+                    const { x, y, textAnchor, dy } = getLabelPosition(point);
+                    return (
+                        <g key={index} onClick={() => handleDotClick(index)} className={cn(gameState === 'playing' && 'cursor-pointer group')}>
+                            <circle
+                                cx={`${point.x}%`}
+                                cy={`${point.y}%`}
+                                r="6"
                                 className={cn(
-                                    "text-sm font-bold fill-muted-foreground select-none",
-                                    index < connectedCount && "fill-primary/50"
+                                    "fill-transparent group-hover:fill-primary/20",
                                 )}
-                            >
-                                {index + 1}
-                            </text>
-                        )}
-                    </g>
-                ))}
+                            />
+                            <circle
+                                cx={`${point.x}%`}
+                                cy={`${point.y}%`}
+                                r="2"
+                                className={cn(
+                                    "transition-colors",
+                                    index < connectedCount ? "fill-primary" : "fill-muted-foreground",
+                                    index === connectedCount && gameState === 'playing' && "fill-primary animate-pulse"
+                                )}
+                            />
+                            {gameState !== 'finished' && (
+                                <text
+                                    x={`${x}%`}
+                                    y={`${y}%`}
+                                    dy={dy}
+                                    textAnchor={textAnchor}
+                                    className={cn(
+                                        "text-sm font-bold fill-muted-foreground select-none",
+                                        index < connectedCount && "fill-primary/50"
+                                    )}
+                                >
+                                    {index + 1}
+                                </text>
+                            )}
+                        </g>
+                    )
+                })}
             </svg>
             {renderContent()}
           </div>
