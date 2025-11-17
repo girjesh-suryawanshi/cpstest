@@ -2,9 +2,12 @@
 import * as React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2, ShieldCheck, Gauge, Star } from "lucide-react";
+import { Zap, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2, ShieldCheck, Gauge, Star, Rss } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { allPosts } from "@/lib/blog";
+import { format } from "date-fns";
+import { Leaderboard } from "@/components/leaderboard";
 
 const CupcakeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -27,6 +30,7 @@ const games = [
     { href: "/jitter-click-test", icon: Wind, title: "Jitter Click Test", description: "Test your jitter clicking speed." },
     { href: "/kohi-click-test", icon: Target, title: "Kohi Click Test", description: "A classic 10-second click test." },
     { href: "/butterfly-click-test", icon: ButterflyIcon, title: "Butterfly Click Test", description: "A 20-second clicking challenge." },
+    { href: "/aim-trainer", icon: Crosshair, title: "Aim Trainer", description: "Test your aiming skill and precision."},
     { href: "/spacebar-clicker", icon: Keyboard, title: "Spacebar Clicker", description: "Test your spacebar pressing speed." },
     { href: "/stimulation-clicker", icon: Keyboard, title: "Stimulation Clicker", description: "A spacebar test for stimulation." },
     { href: "/typing-test", icon: Type, title: "Typing Speed Test", description: "Check your typing words per minute." },
@@ -58,6 +62,8 @@ const clickRanks = [
 ]
 
 export default function Home() {
+  const recentPosts = allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3);
+  
   return (
     <div className="flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 bg-background text-foreground">
       <div className="absolute top-0 left-0 w-full h-full bg-grid-red-500/[0.2] opacity-20 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
@@ -87,13 +93,7 @@ export default function Home() {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-                <h2 className="text-3xl font-bold mb-6">Featured Game</h2>
-                <FeaturedGameCard 
-                    href="/aim-trainer"
-                    title="Aim Trainer"
-                    description="Sharpen your precision and reflexes by clicking targets as fast as you can. Perfect for FPS warm-ups."
-                    imageUrl="https://images.unsplash.com/photo-155416812-5301a88136c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG5lb24lMjB0YXJnZXR8ZW58MHx8fHwxNzA3OTQ0NTkzfDA&ixlib=rb-4.0.3&q=80&w=1080"
-                />
+                <Leaderboard game="cps-test" title="Global CPS Test Leaderboard" />
             </div>
             <div>
                 <h2 className="text-3xl font-bold mb-6">What's Your Rank?</h2>
@@ -116,6 +116,31 @@ export default function Home() {
                     </Link>
                 </Card>
             </div>
+        </div>
+
+        <Separator className="bg-border/20"/>
+        
+        <div>
+          <h2 className="text-3xl font-bold text-center">Recent Blog Posts</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
+            {recentPosts.map(post => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
+                <Card className="h-full overflow-hidden transition-shadow duration-300 group-hover:shadow-xl bg-secondary/30 border-border/50 hover:border-primary/50">
+                   <CardHeader>
+                    <CardTitle className="text-xl leading-tight group-hover:text-primary transition-colors">
+                      {post.title}
+                    </CardTitle>
+                    <CardDescription>
+                      {format(new Date(post.date), 'MMMM d, yyyy')}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground text-sm">{post.description}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
 
         <Separator className="bg-border/20"/>
@@ -183,19 +208,4 @@ function GameCard({ href, icon, title, description }: { href: string; icon: Reac
     </Link>
   );
 }
-
-function FeaturedGameCard({ href, title, description, imageUrl }: { href: string; title: string; description: string; imageUrl: string; }) {
-    return (
-        <Link href={href} className="group block">
-            <Card className="overflow-hidden h-full bg-secondary/30 border-primary/20 shadow-[0_0_30px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.3)] hover:-translate-y-1 transition-all duration-300">
-                <div style={{backgroundImage: `url(${imageUrl})`}} className="h-48 bg-cover bg-center transition-transform duration-300 group-hover:scale-105" />
-                <CardHeader>
-                    <CardTitle className="text-2xl group-hover:text-primary transition-colors">{title}</CardTitle>
-                    <CardDescription>{description}</CardDescription>
-                </CardHeader>
-            </Card>
-        </Link>
-    )
-}
-
     

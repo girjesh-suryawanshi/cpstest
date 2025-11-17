@@ -5,7 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Play, RefreshCw } from 'lucide-react';
+import { Play, RefreshCw, Send } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { addScore } from '@/lib/leaderboard';
+import { useToast } from '@/hooks/use-toast';
 
 const WAIT_DURATION = 3; // seconds
 
@@ -27,6 +32,10 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
   const [clickCount, setClickCount] = useState(0);
   const [clickTimestamps, setClickTimestamps] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
+  const [showSubmitDialog, setShowSubmitDialog] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleStart = useCallback(() => {
     setGameState('waiting');
@@ -71,10 +80,35 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
 
   const cps = useMemo(() => {
     if (clickCount === 0 || gameDuration === 0) return 0;
-    const actualDuration = (clickTimestamps[clickTimestamps.length - 1] - startTime) / 1000;
-    if (actualDuration <= 0) return 0;
     return parseFloat((clickCount / gameDuration).toFixed(2));
-  }, [clickCount, gameDuration, clickTimestamps, startTime]);
+  }, [clickCount, gameDuration]);
+
+  const handleScoreSubmit = async () => {
+    if (!playerName.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    
+    const result = await addScore({
+        name: playerName,
+        score: cps,
+        game: 'cps-test'
+    });
+
+    setIsSubmitting(false);
+    setShowSubmitDialog(false);
+
+    if (result) {
+        toast({
+            title: "Score Submitted!",
+            description: "Your score has been added to the leaderboard.",
+        });
+    } else {
+         toast({
+            title: "Error",
+            description: "There was an error submitting your score.",
+            variant: "destructive",
+        });
+    }
+  }
 
   const chartData = useMemo((): ClickData[] => {
     if (gameState !== 'finished' || startTime === 0) {
@@ -139,48 +173,85 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8">
-      <Card className="w-full shadow-lg overflow-hidden">
-        <CardContent 
-          className="p-0"
-          onClick={handleClick}
-        >
-          <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-primary/5 cursor-pointer active:scale-[0.99] active:bg-primary/10' : ''}`}>
-            {renderContent()}
-          </div>
-        </CardContent>
-        {(gameState === 'idle' || gameState === 'finished') && (
-            <CardFooter className="flex justify-center p-6 border-t bg-card">
-              <Button size="lg" onClick={handleStart} className="w-full sm:w-auto">
-                {gameState === 'idle' ? <Play className="mr-2"/> : <RefreshCw className="mr-2"/>}
-                {gameState === 'idle' ? 'Start Test' : 'Try Again'}
-              </Button>
-            </CardFooter>
-        )}
-      </Card>
-      
-      {gameState === 'finished' && (
-        <Card className="w-full shadow-lg">
-          <CardHeader>
-            <CardTitle>Click Rate Analysis</CardTitle>
-            <CardDescription>Your click performance over each second.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[250px] w-full">
-              <LineChart accessibilityLayer data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                <CartesianGrid vertical={false} />
-                <XAxis dataKey="second" tickLine={false} axisLine={false} tickMargin={8} />
-                <YAxis tickLine={false} axisLine={false} tickMargin={8} allowDecimals={false} label={{ value: 'Clicks', angle: -90, position: 'insideLeft', offset: 10 }}/>
-                 <ChartTooltip
-                  cursor={true}
-                  content={<ChartTooltipContent indicator="line" />}
-                />
-                <Line dataKey="clicks" type="monotone" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ fill: "hsl(var(--primary))", r: 5 }} activeDot={{ r: 8, style: { stroke: 'hsl(var(--accent))' } }}/>
-              </LineChart>
-            </ChartContainer>
+    <>
+      <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8">
+        <Card className="w-full shadow-lg overflow-hidden">
+          <CardContent 
+            className="p-0"
+            onClick={handleClick}
+          >
+            <div className={`flex items-center justify-center min-h-[350px] transition-colors ${gameState === 'running' ? 'bg-primary/5 cursor-pointer active:scale-[0.99] active:bg-primary/10' : ''}`}>
+              {renderContent()}
+            </div>
           </CardContent>
+          {(gameState === 'idle' || gameState === 'finished') && (
+              <CardFooter className="flex justify-center p-6 border-t bg-card gap-4">
+                <Button size="lg" onClick={handleStart} className="w-full sm:w-auto">
+                  {gameState === 'idle' ? <Play className="mr-2"/> : <RefreshCw className="mr-2"/>}
+                  {gameState === 'idle' ? 'Start Test' : 'Try Again'}
+                </Button>
+                 {gameState === 'finished' && cps > 0 && (
+                    <Button size="lg" onClick={() => setShowSubmitDialog(true)} variant="outline">
+                        <Send className="mr-2" /> Submit to Leaderboard
+                    </Button>
+                )}
+              </CardFooter>
+          )}
         </Card>
-      )}
-    </div>
+        
+        {gameState === 'finished' && (
+          <Card className="w-full shadow-lg">
+            <CardHeader>
+              <CardTitle>Click Rate Analysis</CardTitle>
+              <CardDescription>Your click performance over each second.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                <LineChart accessibilityLayer data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis dataKey="second" tickLine={false} axisLine={false} tickMargin={8} />
+                  <YAxis tickLine={false} axisLine={false} tickMargin={8} allowDecimals={false} label={{ value: 'Clicks', angle: -90, position: 'insideLeft', offset: 10 }}/>
+                   <ChartTooltip
+                    cursor={true}
+                    content={<ChartTooltipContent indicator="line" />}
+                  />
+                  <Line dataKey="clicks" type="monotone" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ fill: "hsl(var(--primary))", r: 5 }} activeDot={{ r: 8, style: { stroke: 'hsl(var(--accent))' } }}/>
+                </LineChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+       <Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Submit Your Score</DialogTitle>
+            <DialogDescription>
+              Enter your name to appear on the global leaderboard. Your score is {cps} CPS.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="name"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                className="col-span-3"
+                maxLength={20}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleScoreSubmit} disabled={isSubmitting || !playerName.trim()}>
+                {isSubmitting ? 'Submitting...' : 'Submit Score'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
