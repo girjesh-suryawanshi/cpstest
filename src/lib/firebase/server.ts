@@ -8,9 +8,9 @@ const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
 
 const apps = getApps();
 
-if (!apps.length) {
+if (!apps.length && serviceAccount) {
   initializeApp({
-    credential: serviceAccount ? cert(serviceAccount) : undefined,
+    credential: cert(serviceAccount),
   });
 }
 
