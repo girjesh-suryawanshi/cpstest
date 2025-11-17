@@ -1,4 +1,4 @@
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { initializeApp, getApps, cert, getApp, App } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import 'dotenv/config';
 
@@ -6,12 +6,19 @@ const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
   ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
   : undefined;
 
-const apps = getApps();
-
-if (!apps.length && serviceAccount) {
-  initializeApp({
-    credential: cert(serviceAccount),
-  });
+let app: App;
+if (getApps().length === 0) {
+  if (serviceAccount) {
+    app = initializeApp({
+      credential: cert(serviceAccount),
+    });
+  } else {
+    // This is a fallback for local development without service account credentials.
+    // It will allow the server to start, but Firestore operations will fail.
+    app = initializeApp();
+  }
+} else {
+  app = getApp();
 }
 
-export const db = getFirestore();
+export const db = getFirestore(app);
