@@ -13,8 +13,9 @@ if (getApps().length === 0) {
       credential: cert(serviceAccount),
     });
   } else {
-    // This is a fallback for local development without service account credentials.
-    // It will allow the server to start, but Firestore operations will fail.
+    // This is a fallback for local development. It will allow the server to start,
+    // but Firestore operations will fail until the service account is configured.
+    console.warn("Firebase Admin SDK not initialized. Missing FIREBASE_SERVICE_ACCOUNT_KEY. Firestore operations will fail.");
     app = initializeApp();
   }
 } else {
