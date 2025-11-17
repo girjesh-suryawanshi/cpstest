@@ -1,14 +1,14 @@
 'use server';
 
 import { db } from '@/lib/firebase/server';
-import { collection, query, orderBy, limit, addDoc, serverTimestamp, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, limit, addDoc, serverTimestamp, getDocs, Timestamp } from 'firebase/firestore';
 
 export interface Score {
   id?: string;
   name: string;
   score: number;
   game: string;
-  createdAt: any;
+  createdAt: Timestamp;
 }
 
 export async function getLeaderboard(game: string, take: number = 10): Promise<Score[]> {
