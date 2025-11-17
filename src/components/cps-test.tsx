@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -94,7 +95,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
             game: 'cps-test'
         });
 
-        if (result) {
+        if (result && result.id) {
             toast({
                 title: "Score Submitted!",
                 description: "Your score has been added to the leaderboard.",

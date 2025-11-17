@@ -1,17 +1,15 @@
+
 'use server';
 
 import { db } from '@/lib/firebase/server';
 import { FieldValue } from 'firebase-admin/firestore';
 
-// Note: The Score interface from the client-side might have a `Timestamp`
-// type from the client SDK. The server-side equivalent is `FieldValue`.
-// For simplicity in this file, we'll use a more generic interface.
 export interface ScoreData {
   id?: string;
   name: string;
   score: number;
   game: string;
-  createdAt?: any; // Can be Timestamp or FieldValue
+  createdAt?: any;
 }
 
 export async function getLeaderboard(game: string, take: number = 10): Promise<ScoreData[]> {
@@ -28,7 +26,7 @@ export async function getLeaderboard(game: string, take: number = 10): Promise<S
         name: data.name,
         score: data.score,
         game: data.game,
-        createdAt: data.createdAt,
+        createdAt: data.createdAt.toDate().toISOString(), // Convert timestamp to string
       });
     });
     
@@ -47,7 +45,7 @@ export async function addScore(score: Omit<ScoreData, 'id' | 'createdAt'>): Prom
         });
         return { id: docRef.id };
     } catch (error) {
-        console.error("Error adding score: ", error);
+        console.error("Error adding score to Firestore: ", error);
         return null;
     }
 }
