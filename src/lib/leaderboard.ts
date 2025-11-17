@@ -17,7 +17,6 @@ export interface ScoreData {
 export async function getLeaderboard(game: string, take: number = 10): Promise<ScoreData[]> {
   try {
     const scoresRef = db.collection('leaderboard');
-    // NOTE: The admin SDK query is slightly different from the client SDK
     const q = scoresRef.where('game', '==', game).orderBy('score', 'desc').limit(take);
     const querySnapshot = await q.get();
     
@@ -42,8 +41,7 @@ export async function getLeaderboard(game: string, take: number = 10): Promise<S
 
 export async function addScore(score: Omit<ScoreData, 'id' | 'createdAt'>): Promise<{id: string} | null> {
     try {
-        const scoresRef = db.collection('leaderboard');
-        const docRef = await scoresRef.add({
+        const docRef = await db.collection('leaderboard').add({
             ...score,
             createdAt: FieldValue.serverTimestamp(),
         });

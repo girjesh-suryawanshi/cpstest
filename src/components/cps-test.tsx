@@ -87,26 +87,35 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
     if (!playerName.trim() || isSubmitting) return;
     setIsSubmitting(true);
     
-    const result = await addScore({
-        name: playerName,
-        score: cps,
-        game: 'cps-test'
-    });
-
-    setIsSubmitting(false);
-    setShowSubmitDialog(false);
-
-    if (result) {
-        toast({
-            title: "Score Submitted!",
-            description: "Your score has been added to the leaderboard.",
+    try {
+        const result = await addScore({
+            name: playerName,
+            score: cps,
+            game: 'cps-test'
         });
-    } else {
-         toast({
-            title: "Error",
-            description: "There was an error submitting your score.",
+
+        if (result) {
+            toast({
+                title: "Score Submitted!",
+                description: "Your score has been added to the leaderboard.",
+            });
+        } else {
+             toast({
+                title: "Error",
+                description: "There was an error submitting your score.",
+                variant: "destructive",
+            });
+        }
+    } catch (error) {
+        console.error("Failed to submit score:", error);
+        toast({
+            title: "Submission Failed",
+            description: "An unexpected error occurred. Please check the console.",
             variant: "destructive",
         });
+    } finally {
+        setIsSubmitting(false);
+        setShowSubmitDialog(false);
     }
   }
 
