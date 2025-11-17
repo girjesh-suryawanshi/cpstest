@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/lib/firebase/server';
-import { collection, query, orderBy, limit, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, limit, addDoc, serverTimestamp, getDocs } from 'firebase/firestore';
 
 export interface Score {
   id?: string;
