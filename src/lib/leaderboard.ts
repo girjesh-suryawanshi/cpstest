@@ -4,6 +4,7 @@
 import { db } from '@/lib/firebase/server';
 import { FieldValue } from 'firebase-admin/firestore';
 
+// This is the interface for the data we expect from the client.
 export interface ScoreData {
   id?: string;
   name: string;
@@ -12,11 +13,11 @@ export interface ScoreData {
   createdAt?: any;
 }
 
+// This function gets the leaderboard scores from Firestore.
 export async function getLeaderboard(game: string, take: number = 10): Promise<ScoreData[]> {
   try {
     const scoresRef = db.collection('leaderboard');
-    const q = scoresRef.where('game', '==', game).orderBy('score', 'desc').limit(take);
-    const querySnapshot = await q.get();
+    const querySnapshot = await scoresRef.where('game', '==', game).orderBy('score', 'desc').limit(take).get();
     
     const scores: ScoreData[] = [];
     querySnapshot.forEach((doc) => {
@@ -26,26 +27,30 @@ export async function getLeaderboard(game: string, take: number = 10): Promise<S
         name: data.name,
         score: data.score,
         game: data.game,
-        createdAt: data.createdAt.toDate().toISOString(), // Convert timestamp to string
+        createdAt: data.createdAt.toDate().toISOString(), // Convert Firestore Timestamp to ISO string
       });
     });
     
     return scores;
   } catch (error) {
-    console.error("Error getting leaderboard: ", error);
+    console.error("[LEADERBOARD_ERROR] Error getting leaderboard: ", error);
+    // In case of an error, return an empty array.
     return [];
   }
 }
 
+// This function adds a new score to the Firestore leaderboard.
 export async function addScore(score: Omit<ScoreData, 'id' | 'createdAt'>): Promise<{id: string} | null> {
     try {
         const docRef = await db.collection('leaderboard').add({
             ...score,
-            createdAt: FieldValue.serverTimestamp(),
+            createdAt: FieldValue.serverTimestamp(), // Use the server's timestamp
         });
+        // On success, return the new document's ID.
         return { id: docRef.id };
     } catch (error) {
-        console.error("Error adding score to Firestore: ", error);
+        console.error("[LEADERBOARD_ERROR] Error adding score to Firestore: ", error);
+        // On failure, return null.
         return null;
     }
 }
