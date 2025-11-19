@@ -1,6 +1,45 @@
 // src/lib/leaderboard.ts
-import { db } from './firebase/server';
+import admin from 'firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
+
+// --- Firebase Admin Initialization ---
+// This logic will now be self-contained in this file to ensure it runs correctly
+// in the serverless environment.
+
+// Function to initialize Firebase Admin SDK
+function initializeAdmin() {
+  // Check if the app is already initialized to prevent re-initialization
+  if (admin.apps.length > 0) {
+    return admin.app();
+  }
+
+  // Get the service account key from environment variables
+  const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  if (!serviceAccountKey) {
+    console.error("FATAL_ERROR: FIREBASE_SERVICE_ACCOUNT_KEY is not set. The server cannot connect to Firebase.");
+    return null;
+  }
+
+  try {
+    // The key is base64 encoded in the environment variable. Decode it.
+    const decodedKey = Buffer.from(serviceAccountKey, 'base64').toString('utf-8');
+    const serviceAccount = JSON.parse(decodedKey);
+
+    // Initialize the Firebase Admin App
+    return admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  } catch (error: any) {
+    console.error("FATAL_ERROR: Failed to initialize Firebase Admin SDK:", error.message);
+    return null;
+  }
+}
+
+// Call the initialization function.
+const adminApp = initializeAdmin();
+const db = adminApp ? admin.firestore() : null;
+
+// --- Leaderboard Functions ---
 
 export type ScorePayload = {
   name: string;
@@ -9,10 +48,10 @@ export type ScorePayload = {
 };
 
 export type Score = {
-    id: string;
-    name: string;
-    score: number;
-    createdAt?: any;
+  id: string;
+  name: string;
+  score: number;
+  createdAt?: any;
 }
 
 export async function addScore(payload: ScorePayload) {
@@ -36,8 +75,8 @@ export async function addScore(payload: ScorePayload) {
     });
 
     return { id: docRef.id };
-  } catch (err) {
-    console.error('[LEADERBOARD] Error adding score to Firestore:', err);
+  } catch (err: any) {
+    console.error('[LEADERBOARD] Error adding score to Firestore:', err.message);
     throw new Error('firestore-write-failed');
   }
 }
