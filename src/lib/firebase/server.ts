@@ -2,37 +2,41 @@ import admin from 'firebase-admin';
 
 let db: admin.firestore.Firestore;
 
-function parseServiceAccount() {
+function initializeAdminApp() {
+  if (admin.apps.length > 0) {
+    return admin.app();
+  }
+
   const rawKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
   if (!rawKey) {
-    console.error('[FIREBASE_INIT] FIREBASE_SERVICE_ACCOUNT_KEY environment variable not set.');
+    console.error('[FIREBASE_INIT] FATAL_ERROR: FIREBASE_SERVICE_ACCOUNT_KEY environment variable not set.');
     return null;
   }
+
   try {
     const decodedKey = Buffer.from(rawKey, 'base64').toString('utf-8');
-    return JSON.parse(decodedKey);
-  } catch (e) {
-    console.error('[FIREBASE_INIT] Failed to parse service account key from Base64:', e);
+    const serviceAccount = JSON.parse(decodedKey);
+
+    // The 'private_key' needs to have its escaped newlines replaced with actual newlines.
+    // This is a common issue when storing JSON keys in environment variables.
+    if (serviceAccount.private_key) {
+        serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+    }
+
+    const app = admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+    console.log('[FIREBASE_INIT] Firebase Admin initialized successfully.');
+    return app;
+  } catch (error: any) {
+    console.error('[FIREBASE_INIT] FATAL_ERROR: Error initializing Firebase Admin:', error.message);
     return null;
   }
 }
 
-if (!admin.apps.length) {
-  const serviceAccount = parseServiceAccount();
-  if (serviceAccount) {
-    try {
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-      });
-      console.log('[FIREBASE_INIT] Firebase Admin initialized.');
-      db = admin.firestore();
-    } catch (error) {
-      console.error('[FIREBASE_INIT] Error initializing Firebase Admin:', error);
-    }
-  } else {
-    console.error('[FIREBASE_INIT] Could not initialize Firebase Admin: Service account details are missing or invalid.');
-  }
-} else {
+const adminApp = initializeAdminApp();
+
+if (adminApp) {
   db = admin.firestore();
 }
 
