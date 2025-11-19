@@ -1,6 +1,25 @@
 // src/app/api/leaderboard/route.ts
 import { NextResponse } from 'next/server';
-import { addScoreToFirestore } from '@/lib/leaderboard';
+import { addScore, getTopScores } from '@/lib/leaderboard';
+
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const game = searchParams.get('game');
+    const limit = searchParams.get('limit');
+
+    if (!game) {
+        return NextResponse.json({ error: 'game-parameter-is-required' }, { status: 400 });
+    }
+
+    try {
+        const scores = await getTopScores(game, limit ? parseInt(limit) : 10);
+        return NextResponse.json(scores);
+    } catch (err: any) {
+        console.error('[API /api/leaderboard GET] Error:', err?.message ?? err);
+        return NextResponse.json({ error: 'server-error' }, { status: 500 });
+    }
+}
+
 
 export async function POST(request: Request) {
   try {
@@ -16,11 +35,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'invalid-payload' }, { status: 400 });
     }
 
-    const result = await addScoreToFirestore({ name: String(name).trim(), score: Number(score), game: String(game) });
+    const result = await addScore({ name: String(name).trim(), score: Number(score), game: String(game) });
 
     return NextResponse.json({ ok: true, id: result.id }, { status: 201 });
   } catch (err: any) {
-    console.error('[API /api/leaderboard] Error:', err?.message ?? err);
+    console.error('[API /api/leaderboard POST] Error:', err?.message ?? err);
     // map known errors to cleaner messages:
     if ((err as Error).message === 'db-not-initialized') {
       return NextResponse.json({ error: 'db-not-initialized' }, { status: 500 });

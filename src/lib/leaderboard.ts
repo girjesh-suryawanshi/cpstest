@@ -2,13 +2,20 @@
 import { db } from './firebase/server';
 import { FieldValue } from 'firebase-admin/firestore';
 
-type ScorePayload = {
+export type ScorePayload = {
   name: string;
   score: number;
   game: string;
 };
 
-export async function addScoreToFirestore(payload: ScorePayload) {
+export type Score = {
+    id: string;
+    name: string;
+    score: number;
+    createdAt?: any;
+}
+
+export async function addScore(payload: ScorePayload) {
   if (!db) {
     console.error('[LEADERBOARD] Firestore not initialized. Cannot add score.');
     throw new Error('db-not-initialized');
@@ -35,8 +42,9 @@ export async function addScoreToFirestore(payload: ScorePayload) {
   }
 }
 
-export async function getTopScores(game: string, limit = 10) {
+export async function getTopScores(game: string, limit = 10): Promise<Score[]> {
   if (!db) {
+    console.error('[LEADERBOARD] Firestore not initialized. Cannot get scores.');
     throw new Error('db-not-initialized');
   }
   try {
@@ -46,7 +54,7 @@ export async function getTopScores(game: string, limit = 10) {
       .orderBy('score', 'desc')
       .limit(limit);
     const snap = await q.get();
-    const results: Array<{ id: string; name: string; score: number; createdAt?: any }> = [];
+    const results: Score[] = [];
     snap.forEach((doc) => {
       const d = doc.data();
       results.push({ id: doc.id, name: d.name, score: d.score, createdAt: d.createdAt });

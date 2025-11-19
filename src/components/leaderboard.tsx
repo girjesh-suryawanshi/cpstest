@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getLeaderboard, Score } from '@/lib/leaderboard';
+import type { Score } from '@/lib/leaderboard';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
@@ -19,9 +19,19 @@ export function Leaderboard({ game, title }: LeaderboardProps) {
     useEffect(() => {
         const fetchScores = async () => {
             setLoading(true);
-            const fetchedScores = await getLeaderboard(game, 10);
-            setScores(fetchedScores);
-            setLoading(false);
+            try {
+                const response = await fetch(`/api/leaderboard?game=${game}&limit=10`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch scores');
+                }
+                const fetchedScores = await response.json();
+                setScores(fetchedScores);
+            } catch (error) {
+                console.error("Error fetching leaderboard scores:", error);
+                setScores([]); // Set to empty array on error
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchScores();
@@ -50,6 +60,11 @@ export function Leaderboard({ game, title }: LeaderboardProps) {
                              <Skeleton className="h-4 w-1/4" />
                            </div>
                         ))}
+                    </div>
+                ) : scores.length === 0 ? (
+                    <div className="text-center text-muted-foreground pt-10">
+                        <p>No scores yet.</p>
+                        <p>Be the first to get on the leaderboard!</p>
                     </div>
                 ) : (
                     <Table>
