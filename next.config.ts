@@ -3,6 +3,10 @@ const withMDX = require('@next/mdx')()
 
 const nextConfig: NextConfig = {
   /* config options here */
+  webpack: (config, { isServer }) => {
+    config.experiments = { ...config.experiments, asyncWebAssembly: true };
+    return config;
+  },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   typescript: {
     ignoreBuildErrors: true,
