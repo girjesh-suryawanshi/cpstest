@@ -1,29 +1,39 @@
-import { initializeApp, getApps, cert, getApp } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import admin from 'firebase-admin';
 
-let app;
-let db;
+let db: admin.firestore.Firestore;
 
-const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
-
-if (serviceAccountKey) {
+function parseServiceAccount() {
+  const rawKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  if (!rawKey) {
+    console.error('[FIREBASE_INIT] FIREBASE_SERVICE_ACCOUNT_KEY environment variable not set.');
+    return null;
+  }
   try {
-    // Before parsing, replace the escaped newlines with actual newlines
-    const formattedKey = JSON.parse(serviceAccountKey);
+    const decodedKey = Buffer.from(rawKey, 'base64').toString('utf-8');
+    return JSON.parse(decodedKey);
+  } catch (e) {
+    console.error('[FIREBASE_INIT] Failed to parse service account key from Base64:', e);
+    return null;
+  }
+}
 
-    if (!getApps().length) {
-      app = initializeApp({
-        credential: cert(formattedKey),
+if (!admin.apps.length) {
+  const serviceAccount = parseServiceAccount();
+  if (serviceAccount) {
+    try {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
       });
-    } else {
-      app = getApp();
+      console.log('[FIREBASE_INIT] Firebase Admin initialized.');
+      db = admin.firestore();
+    } catch (error) {
+      console.error('[FIREBASE_INIT] Error initializing Firebase Admin:', error);
     }
-    db = getFirestore(app);
-  } catch (e: any) {
-    console.error('Firebase Admin SDK initialization failed:', e);
+  } else {
+    console.error('[FIREBASE_INIT] Could not initialize Firebase Admin: Service account details are missing or invalid.');
   }
 } else {
-  console.warn('FIREBASE_SERVICE_ACCOUNT_KEY is not set. Firebase Admin SDK not initialized.');
+  db = admin.firestore();
 }
 
 export { db };

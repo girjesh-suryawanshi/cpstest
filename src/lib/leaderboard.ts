@@ -1,57 +1,59 @@
-'use server';
-
-import { db } from '@/lib/firebase/server';
+// src/lib/leaderboard.ts
+import { db } from './firebase/server';
 import { FieldValue } from 'firebase-admin/firestore';
 
-export interface Score {
-  id?: string;
+type ScorePayload = {
   name: string;
   score: number;
   game: string;
-  createdAt?: any;
+};
+
+export async function addScoreToFirestore(payload: ScorePayload) {
+  if (!db) {
+    console.error('[LEADERBOARD] Firestore not initialized. Cannot add score.');
+    throw new Error('db-not-initialized');
+  }
+
+  const { name, score, game } = payload;
+
+  if (!name || typeof score !== 'number' || !game) {
+    throw new Error('invalid-payload');
+  }
+
+  try {
+    const docRef = await db.collection('leaderboard').add({
+      name,
+      score,
+      game,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+
+    return { id: docRef.id };
+  } catch (err) {
+    console.error('[LEADERBOARD] Error adding score to Firestore:', err);
+    throw new Error('firestore-write-failed');
+  }
 }
 
-export async function getLeaderboard(game: string, take: number = 10): Promise<Score[]> {
+export async function getTopScores(game: string, limit = 10) {
   if (!db) {
-    console.error("[LEADERBOARD_ERROR] Firestore is not initialized.");
-    return [];
+    throw new Error('db-not-initialized');
   }
   try {
-    const scoresRef = db.collection('leaderboard');
-    const querySnapshot = await scoresRef.where('game', '==', game).orderBy('score', 'desc').limit(take).get();
-    
-    const scores: Score[] = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      scores.push({
-        id: doc.id,
-        name: data.name,
-        score: data.score,
-        game: data.game,
-        createdAt: data.createdAt.toDate().toISOString(),
-      });
+    const q = db
+      .collection('leaderboard')
+      .where('game', '==', game)
+      .orderBy('score', 'desc')
+      .limit(limit);
+    const snap = await q.get();
+    const results: Array<{ id: string; name: string; score: number; createdAt?: any }> = [];
+    snap.forEach((doc) => {
+      const d = doc.data();
+      results.push({ id: doc.id, name: d.name, score: d.score, createdAt: d.createdAt });
     });
-    
-    return scores;
-  } catch (error) {
-    console.error("[LEADERBOARD_ERROR] Error getting leaderboard: ", error);
-    return [];
+    return results;
+  } catch (err) {
+    console.error('[LEADERBOARD] Error reading leaderboard:', err);
+    throw err;
   }
-}
-
-export async function addScore(score: Omit<Score, 'id' | 'createdAt'>): Promise<{id: string} | null> {
-    if (!db) {
-      console.error("[LEADERBOARD_ERROR] Firestore is not initialized. Cannot add score.");
-      return null;
-    }
-    try {
-        const docRef = await db.collection('leaderboard').add({
-            ...score,
-            createdAt: FieldValue.serverTimestamp(),
-        });
-        return { id: docRef.id };
-    } catch (error) {
-        console.error("[LEADERBOARD_ERROR] Error adding score to Firestore: ", error);
-        return null;
-    }
 }
