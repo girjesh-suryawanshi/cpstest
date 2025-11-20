@@ -132,11 +132,12 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json().catch(() => null);
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         console.error('Leaderboard API error:', res.status, data);
-        toast({ title: 'Submission failed', description: 'There was an error submitting your score. Please try again later.', variant: 'destructive' });
+        const serverMessage = data?.message ? `Server error: ${data.message}` : 'There was an error submitting your score. Please try again later.';
+        toast({ title: 'Submission failed', description: serverMessage, variant: 'destructive' });
       } else {
         toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
       }
