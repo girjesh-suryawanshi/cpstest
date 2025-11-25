@@ -137,12 +137,12 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
         });
 
       toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
+      setShowSubmitDialog(false);
     } catch (err: any) {
       console.error('Submit failed:', err);
       toast({ title: 'Submission failed', description: err.message || 'An unexpected error occurred. Check the console for details.', variant: 'destructive' });
     } finally {
       setIsSubmitting(false);
-      setShowSubmitDialog(false);
     }
   };
 

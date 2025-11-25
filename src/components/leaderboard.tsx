@@ -6,12 +6,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Trophy } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { useFirestore } from '@/hooks/use-firestore';
-import { collection, query, orderBy, limit } from 'firebase/firestore';
+import { collection, query, orderBy, limit, onSnapshot, where } from 'firebase/firestore';
 
 interface Score {
     id: string;
     name: string;
     score: number;
+    game: string;
 }
 
 interface LeaderboardProps {
@@ -25,18 +26,28 @@ export function Leaderboard({ game, title }: LeaderboardProps) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!firestore) return;
+        if (!firestore) {
+            // Keep loading if firestore is not yet available
+            setLoading(true);
+            return;
+        }
 
         setLoading(true);
         const scoresCollection = collection(firestore, 'leaderboard');
-        const scoresQuery = query(scoresCollection, where('game', '==', game), orderBy('score', 'desc'), limit(10));
+        // Query for all games, then filter client-side. This is less efficient but
+        // works with simple security rules that don't allow complex indexed queries.
+        const scoresQuery = query(scoresCollection, orderBy('score', 'desc'), limit(50));
 
         const unsubscribe = onSnapshot(scoresQuery, (querySnapshot) => {
-            const fetchedScores: Score[] = [];
+            const allScores: Score[] = [];
             querySnapshot.forEach((doc) => {
-                fetchedScores.push({ id: doc.id, ...doc.data() } as Score);
+                allScores.push({ id: doc.id, ...doc.data() } as Score);
             });
-            setScores(fetchedScores);
+            
+            // Filter by game on the client
+            const gameScores = allScores.filter(score => score.game === game).slice(0, 10);
+
+            setScores(gameScores);
             setLoading(false);
         }, (error) => {
             console.error("Error fetching leaderboard scores:", error);
@@ -61,8 +72,8 @@ export function Leaderboard({ game, title }: LeaderboardProps) {
                 <CardDescription>Top 10 players</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 p-0">
-                {loading && !firestore ? (
-                    <div className="space-y-3">
+                {loading ? (
+                    <div className="space-y-3 pt-2">
                         {[...Array(5)].map((_, i) => (
                            <div key={i} className="flex items-center gap-4">
                              <Skeleton className="h-8 w-8 rounded-full" />
