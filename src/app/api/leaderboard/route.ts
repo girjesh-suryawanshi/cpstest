@@ -1,9 +1,9 @@
 // src/app/api/leaderboard/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { addScore, getTopScores } from '@/lib/leaderboard';
 
-export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
+export async function GET(request: NextRequest) {
+    const searchParams = request.nextUrl.searchParams;
     const game = searchParams.get('game');
     const limit = searchParams.get('limit');
 
