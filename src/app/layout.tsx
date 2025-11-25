@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup, SidebarGroupLabel, SidebarContent } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Zap, HomeIcon, Wind, Target, Keyboard, Type, Timer, Disc, Crosshair, BrainCircuit, MousePointerClick, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Grip, GraduationCap, Blocks, Languages, Share2, Rss } from 'lucide-react';
+import { FirebaseProvider } from '@/components/firebase-provider';
 
 const siteUrl = 'https://www.cpssprint.com'; // Replace with your actual domain
 
@@ -99,331 +100,333 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <SidebarProvider>
-          <Sidebar>
-            <SidebarHeader>
-              <div className="flex items-center gap-3 p-2">
-                <Zap className="h-8 w-8 text-primary"/>
-                <h1 className="text-2xl font-bold text-foreground">
-                  CpsSpeedTest
-                </h1>
-              </div>
-            </SidebarHeader>
-            <SidebarContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/">
-                      <HomeIcon />
-                      Home
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/blog">
-                      <Rss />
-                      Blog
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-              
-              <SidebarGroup>
-                <SidebarGroupLabel className="flex items-center gap-2"><MousePointerClick /> Clicking Skills</SidebarGroupLabel>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/cps-test">
-                        <Zap />
-                        CPS Test
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/cps-test-1s">
-                        <Zap />
-                        CPS Test (1s)
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/jitter-click-test">
-                        <Wind />
-                        Jitter Click Test
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/kohi-click-test">
-                        <Target />
-                        Kohi Click Test
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/butterfly-click-test">
-                        <ButterflyIcon />
-                        Butterfly Click Test
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/aim-trainer">
-                        <Crosshair />
-                        Aim Trainer
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroup>
-
-              <SidebarGroup>
-                <SidebarGroupLabel className="flex items-center gap-2"><Keyboard /> Keyboard Skills</SidebarGroupLabel>
-                <SidebarMenu>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/spacebar-clicker">
-                        <Keyboard />
-                        Spacebar Clicker
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/stimulation-clicker">
-                        <Keyboard />
-                        Stimulation Clicker
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/typing-test">
-                        <Type />
-                        Typing Test
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/typing-test-30s">
-                        <Type />
-                        Typing Test (30s)
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroup>
-
-              <SidebarGroup>
-                <SidebarGroupLabel className="flex items-center gap-2"><Puzzle /> Strategy & Puzzle</SidebarGroupLabel>
-                <SidebarMenu>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/coreball-game">
-                        <Disc />
-                        Coreball Game
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/cupcake-2048">
-                        <CupcakeIcon />
-                        Cupcake 2048
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/jigsaw-puzzle">
-                        <Grip />
-                        Jigsaw Puzzle
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/sliding-puzzle">
-                        <Puzzle />
-                        Sliding Puzzle
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroup>
-
-              <SidebarGroup>
-                <SidebarGroupLabel className="flex items-center gap-2"><Brain /> Memory & Reflex</SidebarGroupLabel>
-                <SidebarMenu>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/reaction-time-test">
-                        <Timer />
-                        Reaction Time Test
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/memory-game">
-                        <BrainCircuit />
-                        Memory Game
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/number-memory-test">
-                        <BrainCircuit />
-                        Number Memory
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/sequence-memory-test">
-                        <BrainCircuit />
-                        Sequence Memory
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/chimp-test">
-                        <Brain />
-                        Chimp Test
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/verbal-memory-test">
-                        <MessageSquare />
-                        Verbal Memory
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/visual-memory-test">
-                        <Eye />
-                        Visual Memory
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link href="/word-memory-test">
-                        <FileText />
-                        Word Memory
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroup>
-              
-               <SidebarGroup>
-                <SidebarGroupLabel className="flex items-center gap-2"><GraduationCap /> Educational</SidebarGroupLabel>
-                 <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link href="/math-quiz">
-                          <GraduationCap />
-                          Math Quiz
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                 </SidebarMenu>
-               </SidebarGroup>
-
-               <SidebarGroup>
-                <SidebarGroupLabel className="flex items-center gap-2"><Languages /> Language</SidebarGroupLabel>
-                 <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link href="/word-scramble">
-                          <Languages />
-                          Word Scramble
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                 </SidebarMenu>
-               </SidebarGroup>
-
-               <SidebarGroup>
-                <SidebarGroupLabel className="flex items-center gap-2"><Paintbrush /> Creative</SidebarGroupLabel>
-                 <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link href="/drawing-pad">
-                          <Paintbrush />
-                          Drawing Pad
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link href="/block-builder">
-                          <Blocks />
-                          Block Builder
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link href="/connect-the-dots">
-                          <Share2 />
-                          Connect the Dots
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                 </SidebarMenu>
-               </SidebarGroup>
-            </SidebarContent>
-          </Sidebar>
-          <div className="flex flex-col min-h-screen">
-            <SidebarInset>
-              <header className="flex h-12 items-center justify-between border-b bg-background/50 px-4 md:hidden">
-                <Link href="/" className="flex items-center gap-2">
-                    <Zap className="h-6 w-6 text-primary" />
-                    <span className="font-bold">CpsSpeedTest</span>
-                </Link>
-                <SidebarTrigger />
-              </header>
-              <main className="flex-1 p-4 sm:p-6">
-                {children}
-              </main>
-              <footer className="mt-auto border-t bg-background/50">
-                <div className="container mx-auto flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
-                  <p className="text-sm text-muted-foreground">
-                    &copy; {new Date().getFullYear()} CpsSpeedTest. All rights reserved.
-                  </p>
-                  <nav className="flex items-center gap-4 sm:gap-6">
-                    <Link href="/about" className="text-sm hover:underline">
-                      About Us
-                    </Link>
-                     <Link href="/blog" className="text-sm hover:underline">
-                      Blog
-                    </Link>
-                    <Link href="/privacy" className="text-sm hover:underline">
-                      Privacy Policy
-                    </Link>
-                    <Link href="/contact" className="text-sm hover:underline">
-                      Contact Us
-                    </Link>
-                  </nav>
+        <FirebaseProvider>
+          <SidebarProvider>
+            <Sidebar>
+              <SidebarHeader>
+                <div className="flex items-center gap-3 p-2">
+                  <Zap className="h-8 w-8 text-primary"/>
+                  <h1 className="text-2xl font-bold text-foreground">
+                    CpsSpeedTest
+                  </h1>
                 </div>
-              </footer>
-            </SidebarInset>
-          </div>
-        </SidebarProvider>
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/">
+                        <HomeIcon />
+                        Home
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                   <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/blog">
+                        <Rss />
+                        Blog
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+                
+                <SidebarGroup>
+                  <SidebarGroupLabel className="flex items-center gap-2"><MousePointerClick /> Clicking Skills</SidebarGroupLabel>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/cps-test">
+                          <Zap />
+                          CPS Test
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/cps-test-1s">
+                          <Zap />
+                          CPS Test (1s)
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/jitter-click-test">
+                          <Wind />
+                          Jitter Click Test
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/kohi-click-test">
+                          <Target />
+                          Kohi Click Test
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/butterfly-click-test">
+                          <ButterflyIcon />
+                          Butterfly Click Test
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/aim-trainer">
+                          <Crosshair />
+                          Aim Trainer
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroup>
+
+                <SidebarGroup>
+                  <SidebarGroupLabel className="flex items-center gap-2"><Keyboard /> Keyboard Skills</SidebarGroupLabel>
+                  <SidebarMenu>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/spacebar-clicker">
+                          <Keyboard />
+                          Spacebar Clicker
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/stimulation-clicker">
+                          <Keyboard />
+                          Stimulation Clicker
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/typing-test">
+                          <Type />
+                          Typing Test
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/typing-test-30s">
+                          <Type />
+                          Typing Test (30s)
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroup>
+
+                <SidebarGroup>
+                  <SidebarGroupLabel className="flex items-center gap-2"><Puzzle /> Strategy & Puzzle</SidebarGroupLabel>
+                  <SidebarMenu>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/coreball-game">
+                          <Disc />
+                          Coreball Game
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/cupcake-2048">
+                          <CupcakeIcon />
+                          Cupcake 2048
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/jigsaw-puzzle">
+                          <Grip />
+                          Jigsaw Puzzle
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/sliding-puzzle">
+                          <Puzzle />
+                          Sliding Puzzle
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroup>
+
+                <SidebarGroup>
+                  <SidebarGroupLabel className="flex items-center gap-2"><Brain /> Memory & Reflex</SidebarGroupLabel>
+                  <SidebarMenu>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/reaction-time-test">
+                          <Timer />
+                          Reaction Time Test
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/memory-game">
+                          <BrainCircuit />
+                          Memory Game
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/number-memory-test">
+                          <BrainCircuit />
+                          Number Memory
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/sequence-memory-test">
+                          <BrainCircuit />
+                          Sequence Memory
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/chimp-test">
+                          <Brain />
+                          Chimp Test
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/verbal-memory-test">
+                          <MessageSquare />
+                          Verbal Memory
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/visual-memory-test">
+                          <Eye />
+                          Visual Memory
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link href="/word-memory-test">
+                          <FileText />
+                          Word Memory
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroup>
+                
+                 <SidebarGroup>
+                  <SidebarGroupLabel className="flex items-center gap-2"><GraduationCap /> Educational</SidebarGroupLabel>
+                   <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                          <Link href="/math-quiz">
+                            <GraduationCap />
+                            Math Quiz
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                   </SidebarMenu>
+                 </SidebarGroup>
+
+                 <SidebarGroup>
+                  <SidebarGroupLabel className="flex items-center gap-2"><Languages /> Language</SidebarGroupLabel>
+                   <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                          <Link href="/word-scramble">
+                            <Languages />
+                            Word Scramble
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                   </SidebarMenu>
+                 </SidebarGroup>
+
+                 <SidebarGroup>
+                  <SidebarGroupLabel className="flex items-center gap-2"><Paintbrush /> Creative</SidebarGroupLabel>
+                   <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                          <Link href="/drawing-pad">
+                            <Paintbrush />
+                            Drawing Pad
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                       <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                          <Link href="/block-builder">
+                            <Blocks />
+                            Block Builder
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                       <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                          <Link href="/connect-the-dots">
+                            <Share2 />
+                            Connect the Dots
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                   </SidebarMenu>
+                 </SidebarGroup>
+              </SidebarContent>
+            </Sidebar>
+            <div className="flex flex-col min-h-screen">
+              <SidebarInset>
+                <header className="flex h-12 items-center justify-between border-b bg-background/50 px-4 md:hidden">
+                  <Link href="/" className="flex items-center gap-2">
+                      <Zap className="h-6 w-6 text-primary" />
+                      <span className="font-bold">CpsSpeedTest</span>
+                  </Link>
+                  <SidebarTrigger />
+                </header>
+                <main className="flex-1 p-4 sm:p-6">
+                  {children}
+                </main>
+                <footer className="mt-auto border-t bg-background/50">
+                  <div className="container mx-auto flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
+                    <p className="text-sm text-muted-foreground">
+                      &copy; {new Date().getFullYear()} CpsSpeedTest. All rights reserved.
+                    </p>
+                    <nav className="flex items-center gap-4 sm:gap-6">
+                      <Link href="/about" className="text-sm hover:underline">
+                        About Us
+                      </Link>
+                       <Link href="/blog" className="text-sm hover:underline">
+                        Blog
+                      </Link>
+                      <Link href="/privacy" className="text-sm hover:underline">
+                        Privacy Policy
+                      </Link>
+                      <Link href="/contact" className="text-sm hover:underline">
+                        Contact Us
+                      </Link>
+                    </nav>
+                  </div>
+                </footer>
+              </SidebarInset>
+            </div>
+          </SidebarProvider>
+        </FirebaseProvider>
         <Toaster />
       </body>
     </html>

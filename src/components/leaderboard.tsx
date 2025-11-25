@@ -1,11 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Score } from '@/lib/leaderboard';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
+import { useFirestore } from '@/hooks/use-firestore';
+import { collection, query, orderBy, limit } from 'firebase/firestore';
+
+interface Score {
+    id: string;
+    name: string;
+    score: number;
+}
 
 interface LeaderboardProps {
     game: string;
@@ -13,29 +20,32 @@ interface LeaderboardProps {
 }
 
 export function Leaderboard({ game, title }: LeaderboardProps) {
+    const firestore = useFirestore();
     const [scores, setScores] = useState<Score[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchScores = async () => {
-            setLoading(true);
-            try {
-                const response = await fetch(`/api/leaderboard?game=${game}&limit=10`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch scores');
-                }
-                const fetchedScores = await response.json();
-                setScores(fetchedScores);
-            } catch (error) {
-                console.error("Error fetching leaderboard scores:", error);
-                setScores([]); // Set to empty array on error
-            } finally {
-                setLoading(false);
-            }
-        };
+        if (!firestore) return;
 
-        fetchScores();
-    }, [game]);
+        setLoading(true);
+        const scoresCollection = collection(firestore, 'leaderboard');
+        const scoresQuery = query(scoresCollection, where('game', '==', game), orderBy('score', 'desc'), limit(10));
+
+        const unsubscribe = onSnapshot(scoresQuery, (querySnapshot) => {
+            const fetchedScores: Score[] = [];
+            querySnapshot.forEach((doc) => {
+                fetchedScores.push({ id: doc.id, ...doc.data() } as Score);
+            });
+            setScores(fetchedScores);
+            setLoading(false);
+        }, (error) => {
+            console.error("Error fetching leaderboard scores:", error);
+            setScores([]);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [firestore, game]);
 
     const getRankIcon = (index: number) => {
         if (index === 0) return <Trophy className="w-5 h-5 text-yellow-400" />;
@@ -51,7 +61,7 @@ export function Leaderboard({ game, title }: LeaderboardProps) {
                 <CardDescription>Top 10 players</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 p-0">
-                {loading ? (
+                {loading && !firestore ? (
                     <div className="space-y-3">
                         {[...Array(5)].map((_, i) => (
                            <div key={i} className="flex items-center gap-4">

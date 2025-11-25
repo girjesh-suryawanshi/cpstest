@@ -3,13 +3,16 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Play, RefreshCw, Award } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { useFirestore } from '@/hooks/use-firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+
 
 const WAIT_DURATION = 3; // seconds
 
@@ -32,6 +35,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
   const [clickTimestamps, setClickTimestamps] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const { toast } = useToast();
+  const firestore = useFirestore();
 
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [playerName, setPlayerName] = useState('');
@@ -111,6 +115,10 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
   };
 
   const handleScoreSubmit = async () => {
+    if (!firestore) {
+        toast({ title: 'Error', description: 'Firestore is not initialized. Cannot submit score.', variant: 'destructive'});
+        return;
+    }
     if (!playerName || playerName.trim().length === 0) {
       toast({ title: 'Enter a name', description: 'Please add a display name before submitting.', variant: 'destructive' });
       return;
@@ -120,27 +128,15 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
     setIsSubmitting(true);
 
     try {
-      const payload = {
-        name: playerName.trim(),
-        score: Number(cps),
-        game: 'cps-test',
-      };
+        const scoresCollection = collection(firestore, 'leaderboard');
+        await addDoc(scoresCollection, {
+            name: playerName.trim(),
+            score: Number(cps),
+            game: 'cps-test',
+            createdAt: serverTimestamp(),
+        });
 
-      const res = await fetch('/api/leaderboard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        console.error('Leaderboard API error:', res.status, data);
-        const serverMessage = data?.message ? `Server error: ${data.message}` : 'There was an error submitting your score. Please try again later.';
-        toast({ title: 'Submission failed', description: serverMessage, variant: 'destructive' });
-      } else {
-        toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
-      }
+      toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
     } catch (err: any) {
       console.error('Submit failed:', err);
       toast({ title: 'Submission failed', description: err.message || 'An unexpected error occurred. Check the console for details.', variant: 'destructive' });
@@ -205,7 +201,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
                 {gameState === 'idle' ? 'Start Test' : 'Try Again'}
               </Button>
               {gameState === 'finished' && (
-                <Button size="lg" variant="outline" onClick={() => setShowSubmitDialog(true)} className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" onClick={() => setShowSubmitDialog(true)} className="w-full sm:w-auto" disabled={!firestore}>
                   <Award className="mr-2" />
                   Submit to Leaderboard
                 </Button>
