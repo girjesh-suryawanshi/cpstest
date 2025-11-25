@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { useFirestore } from '@/hooks/use-firestore';
+import { useFirebase } from '@/components/firebase-provider';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 
@@ -35,7 +35,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
   const [clickTimestamps, setClickTimestamps] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const { toast } = useToast();
-  const firestore = useFirestore();
+  const { firestore } = useFirebase();
 
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [playerName, setPlayerName] = useState('');
@@ -201,7 +201,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
                 {gameState === 'idle' ? 'Start Test' : 'Try Again'}
               </Button>
               {gameState === 'finished' && (
-                <Button size="lg" variant="outline" onClick={() => setShowSubmitDialog(true)} className="w-full sm:w-auto" disabled={!firestore}>
+                <Button size="lg" variant="outline" onClick={() => setShowSubmitDialog(true)} disabled={!firestore}>
                   <Award className="mr-2" />
                   Submit to Leaderboard
                 </Button>

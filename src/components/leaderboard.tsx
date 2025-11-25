@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
-import { useFirestore } from '@/hooks/use-firestore';
+import { useFirebase } from '@/components/firebase-provider';
 import { collection, query, orderBy, limit, onSnapshot, where } from 'firebase/firestore';
 
 interface Score {
@@ -21,7 +21,7 @@ interface LeaderboardProps {
 }
 
 export function Leaderboard({ game, title }: LeaderboardProps) {
-    const firestore = useFirestore();
+    const { firestore } = useFirebase();
     const [scores, setScores] = useState<Score[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -34,8 +34,6 @@ export function Leaderboard({ game, title }: LeaderboardProps) {
 
         setLoading(true);
         const scoresCollection = collection(firestore, 'leaderboard');
-        // Query for all games, then filter client-side. This is less efficient but
-        // works with simple security rules that don't allow complex indexed queries.
         const scoresQuery = query(scoresCollection, orderBy('score', 'desc'), limit(50));
 
         const unsubscribe = onSnapshot(scoresQuery, (querySnapshot) => {
