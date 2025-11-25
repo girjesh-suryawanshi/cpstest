@@ -3,12 +3,13 @@ import admin from 'firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 
 // --- Firebase Admin Initialization (Idempotent) ---
-// This function ensures the Firebase Admin SDK is initialized only once.
 function initializeFirebaseAdmin() {
+  // Check if the app is already initialized to prevent errors
   if (admin.apps.length > 0) {
     return admin.app();
   }
 
+  // Get the service account key from environment variables
   const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
   if (!serviceAccountKey) {
     console.error("FATAL_ERROR: FIREBASE_SERVICE_ACCOUNT_KEY is not set.");
@@ -16,20 +17,22 @@ function initializeFirebaseAdmin() {
   }
 
   try {
-    // The key is base64 encoded. Decode it first.
-    const decodedKey = Buffer.from(serviceAccountKey, 'base64').toString('utf-8');
-    const serviceAccount = JSON.parse(decodedKey);
+    // The key in .env.local is a stringified JSON. Parse it directly.
+    const serviceAccount = JSON.parse(serviceAccountKey);
 
+    // Initialize the app with the service account
     return admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
   } catch (error: any) {
-    console.error("FATAL_ERROR: Failed to initialize Firebase Admin SDK:", error.message);
+    // Log a detailed error message if initialization fails
+    console.error("FATAL_ERROR: Failed to initialize Firebase Admin SDK. Check the format of your FIREBASE_SERVICE_ACCOUNT_KEY.", error.message);
     throw new Error(`db-not-initialized: ${error.message}`);
   }
 }
 
 // Get the initialized Firestore instance.
+// This will only run once per server instance.
 const db = initializeFirebaseAdmin().firestore();
 
 // --- Leaderboard Functions ---
@@ -54,6 +57,10 @@ export async function addScore(payload: ScorePayload) {
     throw new Error('invalid-payload');
   }
 
+  if (!db) {
+      throw new Error('db-not-initialized');
+  }
+
   try {
     const docRef = await db.collection('leaderboard').add({
       name,
@@ -70,6 +77,10 @@ export async function addScore(payload: ScorePayload) {
 }
 
 export async function getTopScores(game: string, limit = 10): Promise<Score[]> {
+  if (!db) {
+    throw new Error('db-not-initialized');
+  }
+
   try {
     const q = db
       .collection('leaderboard')
