@@ -2,31 +2,21 @@
 import admin from 'firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 
-// --- Firebase Admin Initialization (Idempotent) ---
+// --- Firebase Admin Initialization (Idempotent & using ADC) ---
 function initializeFirebaseAdmin() {
   // Check if the app is already initialized to prevent errors
   if (admin.apps.length > 0) {
     return admin.app();
   }
 
-  // Get the service account key from environment variables
-  const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
-  if (!serviceAccountKey) {
-    console.error("FATAL_ERROR: FIREBASE_SERVICE_ACCOUNT_KEY is not set.");
-    throw new Error('db-not-initialized: Service account key is missing.');
-  }
-
+  // In a Google Cloud environment (like Firebase Studio), the SDK
+  // can automatically find the project and credentials. This is called
+  // Application Default Credentials (ADC). This is the most robust method.
   try {
-    // The key in .env.local is a stringified JSON. Parse it directly.
-    const serviceAccount = JSON.parse(serviceAccountKey);
-
-    // Initialize the app with the service account
-    return admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
+    return admin.initializeApp();
   } catch (error: any) {
     // Log a detailed error message if initialization fails
-    console.error("FATAL_ERROR: Failed to initialize Firebase Admin SDK. Check the format of your FIREBASE_SERVICE_ACCOUNT_KEY.", error.message);
+    console.error("FATAL_ERROR: Failed to initialize Firebase Admin SDK with Application Default Credentials.", error.message);
     throw new Error(`db-not-initialized: ${error.message}`);
   }
 }
