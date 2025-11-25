@@ -114,7 +114,7 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
     },
   };
 
-  const handleScoreSubmit = () => {
+  const handleScoreSubmit = async () => {
     if (!firestore) {
         toast({ title: 'Error', description: 'Firestore is not initialized. Cannot submit score.', variant: 'destructive'});
         return;
@@ -127,21 +127,22 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
 
     setIsSubmitting(true);
 
-    const scoresCollection = collection(firestore, 'leaderboard');
-    addDoc(scoresCollection, {
-        name: playerName.trim(),
-        score: Number(cps),
-        game: 'cps-test',
-        createdAt: serverTimestamp(),
-    }).then(() => {
+    try {
+        const scoresCollection = collection(firestore, 'leaderboard');
+        await addDoc(scoresCollection, {
+            name: playerName.trim(),
+            score: Number(cps),
+            game: 'cps-test',
+            createdAt: serverTimestamp(),
+        });
         toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
         setShowSubmitDialog(false);
-    }).catch((err: any) => {
+    } catch (err: any) {
         console.error('Submit failed:', err);
         toast({ title: 'Submission failed', description: err.message || 'An unexpected error occurred.', variant: 'destructive' });
-    }).finally(() => {
+    } finally {
         setIsSubmitting(false);
-    });
+    }
   };
 
   const renderContent = () => {
