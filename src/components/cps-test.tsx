@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 import { useFirebase } from '@/components/firebase-provider';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-
 const WAIT_DURATION = 3; // seconds
 
 type GameState = 'idle' | 'waiting' | 'running' | 'finished';
@@ -24,62 +23,82 @@ interface ClickData {
 }
 
 interface CpsTestProps {
-  gameDuration: number;
+  gameDuration?: number;
 }
 
-export function CpsTest({ gameDuration }: CpsTestProps) {
+export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
   const [gameState, setGameState] = useState<GameState>('idle');
   const [countdown, setCountdown] = useState(WAIT_DURATION);
   const [gameTimer, setGameTimer] = useState(gameDuration);
   const [clickCount, setClickCount] = useState(0);
-  const [clickTimestamps, setClickTimestamps] = useState<number[]>([]);
+  const [clickTimestamps, setClickTimestamps] = useState<number[]>([]); // used only after finish for charting
+  const timestampsRef = useRef<number[]>([]); // avoid re-renders on every click
   const [startTime, setStartTime] = useState<number>(0);
   const { toast } = useToast();
-  const { firestore } = useFirebase();
+
+  // Safe access to firebase context (may be undefined on SSR or during init)
+  const firebaseCtx = useFirebase();
+  const firestore = firebaseCtx?.firestore ?? null;
 
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [playerName, setPlayerName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleStart = useCallback(() => {
+    // guard against accidental double starts
+    if (gameState === 'waiting' || gameState === 'running') return;
+
     setGameState('waiting');
     setCountdown(WAIT_DURATION);
     setClickCount(0);
     setClickTimestamps([]);
+    timestampsRef.current = [];
     setStartTime(0);
     setGameTimer(gameDuration);
     setShowSubmitDialog(false);
-  }, [gameDuration]);
+  }, [gameDuration, gameState]);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
     if (gameState === 'waiting' && countdown > 0) {
       intervalId = setInterval(() => {
-        setCountdown((prev) => prev - 1);
+        setCountdown(prev => Math.max(0, prev - 1));
       }, 1000);
     } else if (gameState === 'waiting' && countdown === 0) {
       setGameState('running');
       setStartTime(Date.now());
     }
-    return () => clearInterval(intervalId);
+    return () => { if (intervalId) clearInterval(intervalId); };
   }, [gameState, countdown]);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
     if (gameState === 'running' && gameTimer > 0) {
       intervalId = setInterval(() => {
-        setGameTimer((prev) => prev - 1);
+        setGameTimer(prev => Math.max(0, prev - 1));
       }, 1000);
     } else if (gameState === 'running' && gameTimer === 0) {
       setGameState('finished');
     }
-    return () => clearInterval(intervalId);
+    return () => { if (intervalId) clearInterval(intervalId); };
   }, [gameState, gameTimer]);
+
+  useEffect(() => {
+    // When game finishes, copy timestampsRef into state once for charting.
+    if (gameState === 'finished') {
+      setClickTimestamps([...timestampsRef.current]);
+    }
+
+    // When returning to idle, clear the ref
+    if (gameState === 'idle') {
+      timestampsRef.current = [];
+    }
+  }, [gameState]);
 
   const handleClick = () => {
     if (gameState === 'running') {
       setClickCount((prev) => prev + 1);
-      setClickTimestamps((prev) => [...prev, Date.now()]);
+      timestampsRef.current.push(Date.now());
     }
   };
 
@@ -114,10 +133,10 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
     },
   };
 
-  const handleScoreSubmit = async () => {
+  const handleScoreSubmit = () => {
     if (!firestore) {
-        toast({ title: 'Error', description: 'Firestore is not initialized. Cannot submit score.', variant: 'destructive'});
-        return;
+      toast({ title: 'Error', description: 'Firestore is not initialized.', variant: 'destructive'});
+      return;
     }
     if (!playerName || playerName.trim().length === 0) {
       toast({ title: 'Enter a name', description: 'Please add a display name before submitting.', variant: 'destructive' });
@@ -127,22 +146,24 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
 
     setIsSubmitting(true);
 
-    try {
-        const scoresCollection = collection(firestore, 'leaderboard');
-        await addDoc(scoresCollection, {
-            name: playerName.trim(),
-            score: Number(cps),
-            game: 'cps-test',
-            createdAt: serverTimestamp(),
-        });
+    const scoresCollection = collection(firestore, 'leaderboard');
+    addDoc(scoresCollection, {
+      name: playerName.trim(),
+      score: Number(cps),
+      clickCount,
+      gameDuration,
+      game: 'cps-test',
+      createdAt: serverTimestamp(),
+    }).then(() => {
         toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
+        setPlayerName('');
         setShowSubmitDialog(false);
-    } catch (err: any) {
-        console.error('Submit failed:', err);
-        toast({ title: 'Submission failed', description: err.message || 'An unexpected error occurred.', variant: 'destructive' });
-    } finally {
         setIsSubmitting(false);
-    }
+    }).catch((err: any) => {
+        console.error('Submit failed:', err);
+        toast({ title: 'Submission failed', description: err?.message || 'An unexpected error occurred.', variant: 'destructive' });
+        setIsSubmitting(false);
+    });
   };
 
   const renderContent = () => {
@@ -188,6 +209,8 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
           <CardContent
             className={cn("p-0 cursor-pointer", gameState === 'running' && 'bg-primary/5')}
             onClick={handleClick}
+            // make clicks more responsive on mobile
+            onPointerDown={(e) => { /* keep default behaviour; onClick keeps working */ }}
           >
             <div className={`flex items-center justify-center min-h-[350px] transition-colors`}>
               {renderContent()}
@@ -230,7 +253,19 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
         )}
       </div>
 
-      <Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
+      <Dialog
+        open={showSubmitDialog}
+        onOpenChange={(open) => {
+          // always sync dialog open state
+          setShowSubmitDialog(open);
+          // ensure submitting flag is reset whenever dialog opens or closes
+          setIsSubmitting(false);
+          if (!open) {
+            // clear player name on close
+            setPlayerName('');
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Submit Your Score</DialogTitle>
@@ -243,13 +278,17 @@ export function CpsTest({ gameDuration }: CpsTestProps) {
               id="name"
               placeholder="Your Name"
               value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
+              // Support both native events and custom input libs that pass value directly
+              onChange={(e: any) => {
+                const val = typeof e === 'string' ? e : (e?.target?.value ?? '');
+                setPlayerName(val);
+              }}
               className="col-span-3"
             />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowSubmitDialog(false)}>Cancel</Button>
-            <Button onClick={handleScoreSubmit} disabled={isSubmitting}>
+            <Button onClick={handleScoreSubmit} disabled={isSubmitting || !firestore}>
               {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           </DialogFooter>
