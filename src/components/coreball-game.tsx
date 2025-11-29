@@ -268,9 +268,9 @@ export function CoreballGame() {
                   <Play className="mr-2"/> Start Game
                </Button>
             )}
-            {gameState === 'gameover' && (
+             {(gameState === 'gameover' || gameState === 'playing') && (
                  <Button size="lg" onClick={handleStart} className="w-full sm:w-auto">
-                      <RefreshCw className="mr-2"/> Try Again
+                      <RefreshCw className="mr-2"/> Restart
                    </Button>
             )}
              {gameState === 'levelComplete' && (
