@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { useFirebase } from '@/components/firebase-provider';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, Firestore } from 'firebase/firestore';
 
 const WAIT_DURATION = 3; // seconds
 
@@ -36,16 +36,13 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
   const [startTime, setStartTime] = useState<number>(0);
   const { toast } = useToast();
 
-  // Safe access to firebase context (may be undefined on SSR or during init)
-  const firebaseCtx = useFirebase();
-  const firestore = firebaseCtx?.firestore ?? null;
+  const { firestore } = useFirebase();
 
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [playerName, setPlayerName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleStart = useCallback(() => {
-    // guard against accidental double starts
     if (gameState === 'waiting' || gameState === 'running') return;
 
     setGameState('waiting');
@@ -56,6 +53,7 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
     setStartTime(0);
     setGameTimer(gameDuration);
     setShowSubmitDialog(false);
+    setIsSubmitting(false);
   }, [gameDuration, gameState]);
 
   useEffect(() => {
@@ -84,12 +82,9 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
   }, [gameState, gameTimer]);
 
   useEffect(() => {
-    // When game finishes, copy timestampsRef into state once for charting.
     if (gameState === 'finished') {
       setClickTimestamps([...timestampsRef.current]);
     }
-
-    // When returning to idle, clear the ref
     if (gameState === 'idle') {
       timestampsRef.current = [];
     }
@@ -133,7 +128,19 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
     },
   };
 
-  const handleScoreSubmit = () => {
+  const submitScore = async (db: Firestore, name: string) => {
+    const scoresCollection = collection(db, 'leaderboard');
+    await addDoc(scoresCollection, {
+      name: name.trim(),
+      score: Number(cps),
+      clickCount,
+      gameDuration,
+      game: 'cps-test',
+      createdAt: serverTimestamp(),
+    });
+  };
+
+  const handleScoreSubmit = async () => {
     if (!firestore) {
       toast({ title: 'Error', description: 'Firestore is not initialized.', variant: 'destructive'});
       return;
@@ -146,25 +153,19 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
 
     setIsSubmitting(true);
 
-    const scoresCollection = collection(firestore, 'leaderboard');
-    addDoc(scoresCollection, {
-      name: playerName.trim(),
-      score: Number(cps),
-      clickCount,
-      gameDuration,
-      game: 'cps-test',
-      createdAt: serverTimestamp(),
-    }).then(() => {
-        toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
-        setPlayerName('');
-        setShowSubmitDialog(false);
-        setIsSubmitting(false);
-    }).catch((err: any) => {
-        console.error('Submit failed:', err);
-        toast({ title: 'Submission failed', description: err?.message || 'An unexpected error occurred.', variant: 'destructive' });
-        setIsSubmitting(false);
-    });
+    try {
+      await submitScore(firestore, playerName);
+      toast({ title: 'Score submitted!', description: 'Your score has been added to the leaderboard.' });
+    } catch (err: any) {
+      console.error('Submit failed:', err);
+      toast({ title: 'Submission failed', description: err?.message || 'An unexpected error occurred.', variant: 'destructive' });
+    } finally {
+      setIsSubmitting(false);
+      setShowSubmitDialog(false);
+      setPlayerName('');
+    }
   };
+
 
   const renderContent = () => {
     switch (gameState) {
@@ -209,7 +210,6 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
           <CardContent
             className={cn("p-0 cursor-pointer", gameState === 'running' && 'bg-primary/5')}
             onClick={handleClick}
-            // make clicks more responsive on mobile
             onPointerDown={(e) => { /* keep default behaviour; onClick keeps working */ }}
           >
             <div className={`flex items-center justify-center min-h-[350px] transition-colors`}>
@@ -253,19 +253,7 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
         )}
       </div>
 
-      <Dialog
-        open={showSubmitDialog}
-        onOpenChange={(open) => {
-          // always sync dialog open state
-          setShowSubmitDialog(open);
-          // ensure submitting flag is reset whenever dialog opens or closes
-          setIsSubmitting(false);
-          if (!open) {
-            // clear player name on close
-            setPlayerName('');
-          }
-        }}
-      >
+      <Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Submit Your Score</DialogTitle>
@@ -278,17 +266,13 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
               id="name"
               placeholder="Your Name"
               value={playerName}
-              // Support both native events and custom input libs that pass value directly
-              onChange={(e: any) => {
-                const val = typeof e === 'string' ? e : (e?.target?.value ?? '');
-                setPlayerName(val);
-              }}
+              onChange={(e) => setPlayerName(e.target.value)}
               className="col-span-3"
             />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowSubmitDialog(false)}>Cancel</Button>
-            <Button onClick={handleScoreSubmit} disabled={isSubmitting || !firestore}>
+            <Button onClick={handleScoreSubmit} disabled={isSubmitting}>
               {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           </DialogFooter>
