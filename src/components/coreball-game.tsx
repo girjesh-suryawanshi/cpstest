@@ -49,6 +49,10 @@ export function CoreballGame() {
   const draw = useCallback((ctx: CanvasRenderingContext2D, center: { x: number, y: number }) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
+    // Draw background
+    ctx.fillStyle = 'hsl(var(--card))';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
     // Draw core
     ctx.beginPath();
     ctx.arc(center.x, center.y, CORE_RADIUS, 0, 2 * Math.PI);

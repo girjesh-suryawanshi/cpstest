@@ -21,32 +21,38 @@ export function DrawingPad() {
   const [brushSize, setBrushSize] = useState(5);
   const [isErasing, setIsErasing] = useState(false);
 
+  const clearCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    const context = contextRef.current;
+    if (canvas && context) {
+      context.fillStyle = 'hsl(var(--background))';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }, []);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
     // Adjust for device pixel ratio for sharper drawing
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = canvas.offsetWidth * dpr;
-    canvas.height = canvas.offsetHeight * dpr;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
 
     const context = canvas.getContext('2d');
     if (!context) return;
     context.scale(dpr, dpr);
     context.lineCap = 'round';
-    context.strokeStyle = color;
-    context.lineWidth = brushSize;
     contextRef.current = context;
 
-    // Set initial white background
-    context.fillStyle = 'white';
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    clearCanvas();
 
-  }, []);
+  }, [clearCanvas]);
 
   useEffect(() => {
     if (contextRef.current) {
-      contextRef.current.strokeStyle = isErasing ? '#FFFFFF' : color;
+      contextRef.current.strokeStyle = isErasing ? 'hsl(var(--background))' : color;
       contextRef.current.lineWidth = isErasing ? brushSize * 3 : brushSize;
     }
   }, [color, brushSize, isErasing]);
@@ -73,15 +79,6 @@ export function DrawingPad() {
     if (contextRef.current) {
       contextRef.current.lineTo(offsetX, offsetY);
       contextRef.current.stroke();
-    }
-  };
-
-  const clearCanvas = () => {
-    const canvas = canvasRef.current;
-    const context = contextRef.current;
-    if (canvas && context) {
-      context.fillStyle = 'white';
-      context.fillRect(0, 0, canvas.width, canvas.height);
     }
   };
 
@@ -137,7 +134,7 @@ export function DrawingPad() {
             onMouseUp={finishDrawing}
             onMouseMove={draw}
             onMouseLeave={finishDrawing}
-            className="w-full h-[600px] bg-white cursor-crosshair"
+            className="w-full h-[600px] cursor-crosshair"
           />
         </CardContent>
       </Card>
