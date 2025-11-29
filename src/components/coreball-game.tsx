@@ -50,16 +50,16 @@ export function CoreballGame() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
     // Draw background
-    ctx.fillStyle = 'hsl(var(--card))';
+    ctx.fillStyle = '#0a0a0a'; // Equivalent to hsl(var(--card)) in dark mode
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     // Draw core
     ctx.beginPath();
     ctx.arc(center.x, center.y, CORE_RADIUS, 0, 2 * Math.PI);
-    ctx.fillStyle = 'hsl(var(--foreground))';
+    ctx.fillStyle = '#fcfcfc'; // Equivalent to hsl(var(--foreground))
     ctx.fill();
     ctx.closePath();
-    ctx.fillStyle = 'hsl(var(--background))';
+    ctx.fillStyle = '#0a0a0a'; // Equivalent to hsl(var(--background))
     ctx.font = '30px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -76,7 +76,7 @@ export function CoreballGame() {
       ctx.beginPath();
       ctx.moveTo(center.x, center.y);
       ctx.lineTo(x, y);
-      ctx.strokeStyle = 'hsl(var(--foreground))';
+      ctx.strokeStyle = '#fcfcfc'; // Equivalent to hsl(var(--foreground))
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.closePath();
@@ -84,7 +84,7 @@ export function CoreballGame() {
       // Draw ball
       ctx.beginPath();
       ctx.arc(x, y, BALL_RADIUS, 0, 2 * Math.PI);
-      ctx.fillStyle = 'hsl(var(--foreground))';
+      ctx.fillStyle = '#fcfcfc'; // Equivalent to hsl(var(--foreground))
       ctx.fill();
       ctx.closePath();
     });
@@ -99,7 +99,7 @@ export function CoreballGame() {
     }
     
     // Draw balls left count
-    ctx.fillStyle = 'hsl(var(--foreground))';
+    ctx.fillStyle = '#fcfcfc'; // Equivalent to hsl(var(--foreground))
     ctx.font = '20px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`Balls left: ${ballsLeft}`, center.x, 30);

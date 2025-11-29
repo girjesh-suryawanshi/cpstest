@@ -20,13 +20,38 @@ export function DrawingPad() {
   const [color, setColor] = useState('#000000');
   const [brushSize, setBrushSize] = useState(5);
   const [isErasing, setIsErasing] = useState(false);
+  const [bgColor, setBgColor] = useState<string>('#0a0a0a');
 
   const clearCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const context = contextRef.current;
     if (canvas && context) {
-      context.fillStyle = 'hsl(var(--background))';
+      context.fillStyle = bgColor;
       context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }, [bgColor]);
+
+  useEffect(() => {
+     // Function to get computed style
+    const getThemeColor = (cssVariable: string) => {
+        if (typeof window !== 'undefined') {
+            return getComputedStyle(document.documentElement).getPropertyValue(cssVariable).trim();
+        }
+        return '#0a0a0a'; // Default fallback
+    };
+    
+    const backgroundHsl = getThemeColor('--background');
+    if (backgroundHsl) {
+        // This is a simplified conversion. For full HSL support, a library would be better.
+        // Assuming format `H S% L%`
+        const parts = backgroundHsl.split(" ");
+        if (parts.length === 3) {
+            const h = parseFloat(parts[0]);
+            const s = parseFloat(parts[1]);
+            const l = parseFloat(parts[2]);
+            // A simple check for dark/light based on lightness
+             setBgColor(`hsl(${h}, ${s}%, ${l}%)`);
+        }
     }
   }, []);
 
@@ -52,10 +77,10 @@ export function DrawingPad() {
 
   useEffect(() => {
     if (contextRef.current) {
-      contextRef.current.strokeStyle = isErasing ? 'hsl(var(--background))' : color;
+      contextRef.current.strokeStyle = isErasing ? bgColor : color;
       contextRef.current.lineWidth = isErasing ? brushSize * 3 : brushSize;
     }
-  }, [color, brushSize, isErasing]);
+  }, [color, brushSize, isErasing, bgColor]);
 
   const startDrawing = ({ nativeEvent }: React.MouseEvent<HTMLCanvasElement>) => {
     const { offsetX, offsetY } = nativeEvent;
