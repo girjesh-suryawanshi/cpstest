@@ -162,7 +162,6 @@ export function CpsTest({ gameDuration = 5 }: CpsTestProps) {
     } finally {
       setIsSubmitting(false);
       setShowSubmitDialog(false);
-      setPlayerName('');
     }
   };
 
