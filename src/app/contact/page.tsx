@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 
 export default function ContactPage() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="w-full">
       <header className="w-full max-w-4xl mx-auto mb-8">
         <h1 className="text-4xl font-bold text-foreground">
           Contact Us

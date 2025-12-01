@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="w-full">
       <header className="w-full max-w-4xl mx-auto mb-8">
         <h1 className="text-4xl font-bold text-foreground">
           Privacy Policy

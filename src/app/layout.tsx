@@ -99,7 +99,7 @@ export default function RootLayout({
           }) }}
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased flex flex-col">
         <FirebaseProvider>
           <SidebarProvider>
             <Sidebar>
@@ -390,41 +390,39 @@ export default function RootLayout({
                  </SidebarGroup>
               </SidebarContent>
             </Sidebar>
-            <div className="flex flex-col min-h-screen">
-              <SidebarInset>
-                <header className="flex h-12 items-center justify-between border-b bg-background/50 px-4 md:hidden">
-                  <Link href="/" className="flex items-center gap-2">
-                      <Zap className="h-6 w-6 text-primary" />
-                      <span className="font-bold">CpsSpeedTest</span>
-                  </Link>
-                  <SidebarTrigger />
-                </header>
-                <main className="flex-1 p-4 sm:p-6 flex flex-col items-center">
-                  {children}
-                </main>
-                <footer className="mt-auto border-t bg-background/50">
-                  <div className="container mx-auto flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
-                    <p className="text-sm text-muted-foreground">
-                      &copy; {new Date().getFullYear()} CpsSpeedTest. All rights reserved.
-                    </p>
-                    <nav className="flex items-center gap-4 sm:gap-6">
-                      <Link href="/about" className="text-sm hover:underline">
-                        About Us
-                      </Link>
-                       <Link href="/blog" className="text-sm hover:underline">
-                        Blog
-                      </Link>
-                      <Link href="/privacy" className="text-sm hover:underline">
-                        Privacy Policy
-                      </Link>
-                      <Link href="/contact" className="text-sm hover:underline">
-                        Contact Us
-                      </Link>
-                    </nav>
-                  </div>
-                </footer>
-              </SidebarInset>
-            </div>
+            <SidebarInset className="flex-1">
+              <header className="flex h-12 items-center justify-between border-b bg-background/50 px-4 md:hidden">
+                <Link href="/" className="flex items-center gap-2">
+                    <Zap className="h-6 w-6 text-primary" />
+                    <span className="font-bold">CpsSpeedTest</span>
+                </Link>
+                <SidebarTrigger />
+              </header>
+              <main className="flex-1 p-4 sm:p-6 flex flex-col items-center">
+                {children}
+              </main>
+              <footer className="mt-auto border-t bg-background/50">
+                <div className="container mx-auto flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
+                  <p className="text-sm text-muted-foreground">
+                    &copy; {new Date().getFullYear()} CpsSpeedTest. All rights reserved.
+                  </p>
+                  <nav className="flex items-center gap-4 sm:gap-6">
+                    <Link href="/about" className="text-sm hover:underline">
+                      About Us
+                    </Link>
+                     <Link href="/blog" className="text-sm hover:underline">
+                      Blog
+                    </Link>
+                    <Link href="/privacy" className="text-sm hover:underline">
+                      Privacy Policy
+                    </Link>
+                    <Link href="/contact" className="text-sm hover:underline">
+                      Contact Us
+                    </Link>
+                  </nav>
+                </div>
+              </footer>
+            </SidebarInset>
           </SidebarProvider>
         </FirebaseProvider>
         <Toaster />

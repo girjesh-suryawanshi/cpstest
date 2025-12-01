@@ -65,7 +65,7 @@ export default function Home() {
   const recentPosts = allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3);
   
   return (
-    <div className="flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 bg-background text-foreground">
+    <div className="w-full flex flex-col items-center p-4 sm:p-8 md:p-12 bg-background text-foreground">
       <div className="absolute top-0 left-0 w-full h-full bg-grid-red-500/[0.2] opacity-20 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       
       <header className="relative w-full max-w-4xl mx-auto mb-16 text-center z-10">
