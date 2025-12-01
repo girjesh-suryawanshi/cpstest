@@ -52,7 +52,7 @@ export default function ButterflyClickTestPage() {
           </p>
         </header>
         <CpsTest gameDuration={20} />
-        <Card className="w-full max-w-2xl mt-8">
+        <Card className="w-full max-w-2xl mt-8 mx-auto">
           <CardContent className="p-6 space-y-4">
               <h2 className="text-2xl font-semibold">About the Butterfly Click Test</h2>
               <p>The Butterfly Click Test is a challenge designed to measure your clicking speed using the butterfly clicking technique. This method involves rapidly alternating clicks with two fingers (usually the index and middle fingers) on a single mouse button. It's a popular technique among pro gamers, especially in Minecraft, to achieve extremely high CPS (clicks per second). This 20-second test provides a great opportunity to practice and perfect your butterfly clicking skills.</p>

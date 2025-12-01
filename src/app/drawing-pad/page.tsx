@@ -13,7 +13,7 @@ export default function DrawingPadPage() {
         </p>
       </header>
       <DrawingPad />
-      <Card className="w-full max-w-4xl mt-8">
+      <Card className="w-full max-w-4xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Drawing Pad</h2>
             <p>The Drawing Pad is a digital canvas where your imagination can run wild. It's a simple yet powerful tool for doodling, sketching, or creating intricate masterpieces. Whether you're an artist looking for a quick sketch space or just want to have fun expressing your creative side, our Drawing Pad provides a clean, responsive, and intuitive interface. With a palette of vibrant colors, adjustable brush sizes, and an easy-to-use eraser, you have everything you need to bring your ideas to life.</p>

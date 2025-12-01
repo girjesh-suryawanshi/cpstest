@@ -13,7 +13,7 @@ export default function WordScramblePage() {
         </p>
       </header>
       <WordScramble />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About Word Scramble</h2>
             <p>Word Scramble is a classic brain-teaser that challenges your vocabulary and mental agility. In this fast-paced game, you are presented with a jumble of letters and your task is to rearrange them to form a valid word. It’s a fantastic way to improve your spelling, expand your vocabulary, and enhance your problem-solving skills under pressure. With a 60-second timer, every correct answer brings a sense of accomplishment and pushes you to think faster.</p>

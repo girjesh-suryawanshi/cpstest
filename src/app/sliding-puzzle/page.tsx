@@ -13,7 +13,7 @@ export default function SlidingPuzzlePage() {
         </p>
       </header>
       <SlidingPuzzle />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Sliding Puzzle</h2>
             <p>The Sliding Puzzle is a classic brain-teaser that challenges your logic, strategy, and foresight. This digital version brings the traditional tile game to your screen, asking you to arrange a set of numbered tiles in sequential order by sliding them into the single empty space. It’s an excellent exercise for improving problem-solving skills, spatial reasoning, and patience. Each move must be carefully considered to avoid getting stuck and to solve the puzzle efficiently.</p>

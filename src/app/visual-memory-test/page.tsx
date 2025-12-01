@@ -14,7 +14,7 @@ export default function VisualMemoryTestPage() {
         </p>
       </header>
       <VisualMemoryTest />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Visual Memory Test</h2>
             <p>The Visual Memory Test is a challenging cognitive game designed to test and improve your ability to recall visual patterns. This exercise targets your short-term spatial memory by briefly showing you a pattern of highlighted squares on a grid. Your task is to remember which squares were highlighted and then replicate the pattern. As you advance through the levels, the grid size increases and the patterns become more complex, pushing your visual recall abilities to their limits.</p>

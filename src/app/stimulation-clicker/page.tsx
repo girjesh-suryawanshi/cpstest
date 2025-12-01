@@ -13,7 +13,7 @@ export default function StimulationClickerPage() {
         </p>
       </header>
       <SpacebarTest gameDuration={30} />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Stimulation Clicker</h2>
             <p>The Stimulation Clicker is a fast-paced, 30-second challenge designed to test and improve your tapping speed and stamina. Unlike shorter tests, this extended duration measures your ability to maintain a high rate of spacebar presses over time, making it an excellent tool for building endurance. Whether you're a gamer looking to enhance your in-game actions or simply seeking a fun way to measure your keyboard reflexes, the Stimulation Clicker offers a robust and engaging experience.</p>

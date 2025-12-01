@@ -13,7 +13,7 @@ export default function MathQuizPage() {
         </p>
       </header>
       <MathQuiz />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Math Quiz</h2>
             <p>The Math Quiz is a fast-paced challenge designed to test and sharpen your mental arithmetic skills. In this game, you'll be presented with a series of quick-fire math problems involving addition, subtraction, and multiplication. It's an excellent way to improve your calculation speed, enhance your focus under pressure, and give your brain a stimulating workout. Whether you're a student looking to practice, a professional wanting to keep your mind sharp, or just someone who enjoys a good mental challenge, this quiz is for you.</p>

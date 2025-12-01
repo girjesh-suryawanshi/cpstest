@@ -13,7 +13,7 @@ export default function BlockBuilderPage() {
         </p>
       </header>
       <BlockBuilder />
-      <Card className="w-full max-w-4xl mt-8">
+      <Card className="w-full max-w-4xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About Block Builder</h2>
             <p>Block Builder is a digital canvas for pixel art enthusiasts and creative minds. It provides a simple grid-based environment where you can bring your ideas to life, one block at a time. Whether you're designing retro game sprites, creating intricate patterns, or just doodling for fun, this tool offers a straightforward and satisfying creative outlet. With an array of colors and easy-to-use tools, you can focus on what matters most: your creation.</p>

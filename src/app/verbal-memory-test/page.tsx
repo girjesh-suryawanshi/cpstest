@@ -13,7 +13,7 @@ export default function VerbalMemoryTestPage() {
         </p>
       </header>
       <VerbalMemoryTest />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Verbal Memory Test</h2>
             <p>The Verbal Memory Test is a compelling cognitive challenge designed to assess your ability to recognize and recall information. This test specifically targets your short-term verbal memory by presenting you with a continuous stream of words. Your task is to determine if each word is new or if you've already seen it during the current session. It’s an excellent way to measure and improve your attention, focus, and memory recognition skills in a dynamic and engaging format.</p>

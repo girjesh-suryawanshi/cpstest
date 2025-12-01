@@ -13,7 +13,7 @@ export default function JigsawPuzzlePage() {
         </p>
       </header>
       <JigsawPuzzle />
-       <Card className="w-full max-w-2xl mt-8">
+       <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Jigsaw Puzzle</h2>
             <p>The Jigsaw Puzzle is a timeless classic that challenges your spatial reasoning and attention to detail. This digital version brings the beloved pastime to your screen, allowing you to piece together a beautiful image tile by tile. The goal is to recreate the original picture by correctly arranging the scrambled pieces. It's a relaxing yet mentally stimulating activity that helps improve cognitive function, short-term memory, and problem-solving skills.</p>

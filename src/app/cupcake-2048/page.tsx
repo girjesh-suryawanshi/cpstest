@@ -13,7 +13,7 @@ export default function Cupcake2048Page() {
         </p>
       </header>
       <Cupcake2048 />
-      <Card className="w-full max-w-lg mt-8">
+      <Card className="w-full max-w-lg mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About Cupcake 2048</h2>
             <p>Cupcake 2048 is a charming and delicious twist on the classic 2048 puzzle game. Instead of numbers, you'll be merging delightful cupcakes to discover new, more elaborate treats. The goal is to slide matching cupcakes together to combine them, doubling their value and creating a new cupcake. Plan your moves strategically to keep the board from filling up and see how many new cupcake recipes you can unlock. It’s a test of foresight, strategy, and your love for sweet treats!</p>

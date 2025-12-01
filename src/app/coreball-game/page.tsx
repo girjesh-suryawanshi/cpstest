@@ -13,7 +13,7 @@ export default function CoreballGamePage() {
         </p>
       </header>
       <CoreballGame />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Coreball Game</h2>
             <p>Coreball is a captivating game of precision, timing, and strategy. The objective is simple: attach a series of numbered balls to a central, rotating core. The challenge lies in doing so without any of the balls colliding with each other. As you advance through the levels, the core's rotation speed increases, and the number of pre-attached balls grows, demanding quicker reflexes and more careful planning. It’s an addictive test of focus and rhythm that’s easy to learn but difficult to master.</p>

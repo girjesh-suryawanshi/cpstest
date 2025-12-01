@@ -13,7 +13,7 @@ export default function WordMemoryTestPage() {
         </p>
       </header>
       <WordMemoryTest />
-       <Card className="w-full max-w-2xl mt-8">
+       <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Word Memory Test</h2>
             <p>The Word Memory Test is a challenging cognitive exercise designed to measure and improve your short-term verbal recall. This game presents you with a list of words for a brief period, then tasks you with remembering and typing out as many of them as you can. It’s an excellent way to train your brain's ability to encode, store, and retrieve information, which are crucial skills for learning, studying, and everyday life. As you progress, the number of words increases, pushing your memory to new limits.</p>

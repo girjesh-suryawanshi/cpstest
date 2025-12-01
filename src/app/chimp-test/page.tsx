@@ -13,7 +13,7 @@ export default function ChimpTestPage() {
         </p>
       </header>
       <ChimpTest />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Chimp Test</h2>
             <p>The Chimp Test is a fascinating challenge of working memory, inspired by studies that showcased the incredible short-term memory abilities of chimpanzees. The test measures your ability to remember the sequential position of numbers on a screen. After you click the first number, all other numbers are hidden, and you must click the squares where they were located in ascending order. It’s a true test of photographic memory and cognitive speed.</p>

@@ -52,7 +52,7 @@ export default function JitterClickTestPage() {
           </p>
         </header>
         <CpsTest gameDuration={10} />
-        <Card className="w-full max-w-2xl mt-8">
+        <Card className="w-full max-w-2xl mt-8 mx-auto">
           <CardContent className="p-6 space-y-4">
               <h2 className="text-2xl font-semibold">About the Jitter Click Test</h2>
               <p>Jitter clicking is an advanced technique used by gamers to achieve an extremely high number of clicks per second (CPS). It involves rapidly vibrating your hand or arm to cause your finger to press the mouse button at a high frequency. This 10-second test is designed to measure your jitter clicking ability and help you improve.</p>

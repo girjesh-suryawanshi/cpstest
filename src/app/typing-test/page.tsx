@@ -13,7 +13,7 @@ export default function TypingTestPage() {
         </p>
       </header>
       <TypingTest gameDuration={60} />
-      <Card className="w-full max-w-3xl mt-8">
+      <Card className="w-full max-w-3xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Typing Speed Test</h2>
             <p>The Typing Speed Test is a fundamental tool for anyone looking to measure and improve their keyboard proficiency. In a world driven by digital communication, typing quickly and accurately is a crucial skill. This test measures your typing speed in Words Per Minute (WPM), tracks your accuracy, and helps you identify areas for improvement. Whether you're a student, a professional, or just looking to get faster, this test provides a standardized way to benchmark your skills.</p>

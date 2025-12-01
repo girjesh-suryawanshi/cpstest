@@ -13,7 +13,7 @@ export default function NumberMemoryTestPage() {
         </p>
       </header>
       <NumberMemoryTest />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Number Memory Test</h2>
             <p>The Number Memory Test is a powerful cognitive challenge designed to measure and improve your short-term and working memory. This test is similar to the digit span task used in cognitive psychology to assess memory capacity. The premise is simple: you are shown a sequence of digits for a short period, and your goal is to recall and enter it correctly. As you succeed, the sequence of numbers grows longer, progressively pushing the limits of your memory.</p>

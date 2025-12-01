@@ -13,7 +13,7 @@ export default function SpacebarClickerPage() {
         </p>
       </header>
       <SpacebarTest gameDuration={15} />
-       <Card className="w-full max-w-2xl mt-8">
+       <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Spacebar Clicker Test</h2>
             <p>The Spacebar Clicker is a fun and simple challenge designed to measure your tapping speed. Whether you're a gamer looking to improve your in-game actions or just curious about how fast you can press the spacebar, this tool provides a quick and accurate way to test your abilities. The goal is to hit the spacebar as many times as possible within the given time limit. It's a great way to improve your finger dexterity and reaction time.</p>

@@ -13,7 +13,7 @@ export default function TypingTest30sPage() {
         </p>
       </header>
       <TypingTest gameDuration={30} />
-      <Card className="w-full max-w-3xl mt-8">
+      <Card className="w-full max-w-3xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the 30-Second Typing Test</h2>
             <p>The 30-second Typing Test is a high-intensity sprint designed to measure your burst typing speed and accuracy under pressure. This quick format is perfect for a warm-up, a quick skill check, or for those who want to practice their initial typing acceleration. It pushes you to find your rhythm immediately and maintain it for a short burst, which is a great way to train for real-world scenarios where you need to type quickly for brief periods.</p>

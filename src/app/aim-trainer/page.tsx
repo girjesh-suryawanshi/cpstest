@@ -52,7 +52,7 @@ export default function AimTrainerPage() {
           </p>
         </header>
         <AimTrainer />
-         <Card className="w-full max-w-2xl mt-8">
+         <Card className="w-full max-w-2xl mt-8 mx-auto">
           <CardContent className="p-6 space-y-4">
               <h2 className="text-2xl font-semibold">About the Aim Trainer</h2>
               <p>The Aim Trainer is designed to help you improve your mouse accuracy, speed, and precision. This tool is perfect for gamers looking to sharpen their skills for FPS (First-Person Shooter) games or anyone wanting to enhance their mouse control. The challenge is simple: hit as many targets as you can before the time runs out. As your score increases, the difficulty ramps up, pushing your abilities to the limit.</p>

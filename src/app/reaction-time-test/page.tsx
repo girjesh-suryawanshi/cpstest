@@ -13,7 +13,7 @@ export default function ReactionTimeTestPage() {
         </p>
       </header>
       <ReactionTimeTest />
-      <Card className="w-full max-w-2xl mt-8">
+      <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Reaction Time Test</h2>
             <p>The Reaction Time Test is a simple but powerful tool to measure your reflex speed. It assesses how quickly you can respond to a visual stimulus. This test is widely used to benchmark cognitive performance and is a great way to train and improve your reaction speed, a critical skill for gaming, sports, and even everyday activities like driving. The challenge is straightforward: click the moment you see the color change.</p>

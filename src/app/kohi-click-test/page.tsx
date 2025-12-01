@@ -52,7 +52,7 @@ export default function KohiClickTestPage() {
           </p>
         </header>
         <CpsTest gameDuration={10} />
-        <Card className="w-full max-w-2xl mt-8">
+        <Card className="w-full max-w-2xl mt-8 mx-auto">
           <CardContent className="p-6 space-y-4">
               <h2 className="text-2xl font-semibold">About the Kohi Click Test</h2>
               <p>The Kohi Click Test is a legendary benchmark for clicking speed, originally popularized by players of the Kohi Minecraft server. It's a straightforward 10-second challenge to see how many clicks you can achieve, measuring your raw CPS (clicks per second). For many gamers, a high score on the Kohi test is a badge of honor, demonstrating elite mouse control and speed essential for PvP (Player vs. Player) combat.</p>

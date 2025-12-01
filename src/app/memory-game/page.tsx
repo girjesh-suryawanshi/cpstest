@@ -13,7 +13,7 @@ export default function MemoryGamePage() {
         </p>
       </header>
       <MemoryGame />
-      <Card className="w-full max-w-4xl mt-8">
+      <Card className="w-full max-w-4xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Memory Game</h2>
             <p>The classic Memory Game, also known as Concentration or Pairs, is a fantastic exercise for your brain. This engaging game challenges your short-term memory, pattern recognition, and focus. By flipping cards to find matching pairs, you are actively training your cognitive skills in a fun and visually appealing way. It’s a perfect game for all ages to sharpen the mind, improve concentration, and enjoy a moment of rewarding puzzle-solving.</p>

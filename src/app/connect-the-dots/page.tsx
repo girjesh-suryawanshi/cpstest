@@ -13,7 +13,7 @@ export default function ConnectTheDotsPage() {
         </p>
       </header>
       <ConnectTheDots />
-      <Card className="w-full max-w-4xl mt-8">
+      <Card className="w-full max-w-4xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About Connect the Dots</h2>
             <p>Connect the Dots is a timeless puzzle that brings a hidden image to life, one line at a time. This digital version revives the classic activity, challenging your ability to follow a sequence and revealing a delightful picture as your reward. It’s a wonderfully relaxing and satisfying game that improves concentration, number recognition, and fine motor skills. Watch as a simple collection of numbered points transforms into a recognizable shape right before your eyes.</p>

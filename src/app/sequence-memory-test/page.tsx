@@ -13,7 +13,7 @@ export default function SequenceMemoryTestPage() {
         </p>
       </header>
       <SequenceMemoryTest />
-       <Card className="w-full max-w-2xl mt-8">
+       <Card className="w-full max-w-2xl mt-8 mx-auto">
         <CardContent className="p-6 space-y-4">
             <h2 className="text-2xl font-semibold">About the Sequence Memory Test</h2>
             <p>The Sequence Memory Test is a challenging cognitive game designed to test and improve your short-term visual and spatial memory. It’s based on the classic "Simon" game, where you must remember and replicate a growing sequence of signals. In this version, a pattern of squares will flash on a grid. Your task is to memorize the sequence and then click the squares in the exact same order. With each successful round, the sequence gets longer, pushing your memory to its limits.</p>

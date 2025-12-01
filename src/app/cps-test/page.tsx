@@ -53,7 +53,7 @@ export default function CpsTestPage() {
             </p>
           </header>
           <CpsTest gameDuration={5} />
-           <Card className="w-full max-w-2xl mt-8">
+           <Card className="w-full max-w-2xl mt-8 mx-auto">
               <CardContent className="p-6 space-y-4">
                   <h2 className="text-2xl font-semibold">About the CPS Test</h2>
                   <p>The CpsSpeedTest (Clicks Per Second) is a simple yet effective tool to measure how fast you can click your mouse. It's a fun way to challenge yourself, compete with friends, and see how your clicking speed stacks up. This test is especially popular among gamers who need quick reflexes and high CPS for a competitive edge.</p>
