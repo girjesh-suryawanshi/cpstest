@@ -42,7 +42,7 @@ export default function ButterflyClickTestPage() {
   return (
     <>
       <JsonLd />
-      <div className="flex flex-col items-center">
+      <div className="w-full">
         <header className="w-full max-w-2xl mx-auto mb-8">
           <h1 className="text-3xl font-bold text-foreground">
             Butterfly Click Test

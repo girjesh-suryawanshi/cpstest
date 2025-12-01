@@ -399,7 +399,7 @@ export default function RootLayout({
                   </Link>
                   <SidebarTrigger />
                 </header>
-                <main className="flex-1 p-4 sm:p-6">
+                <main className="flex-1 p-4 sm:p-6 flex flex-col items-center">
                   {children}
                 </main>
                 <footer className="mt-auto border-t bg-background/50">

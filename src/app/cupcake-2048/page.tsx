@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function Cupcake2048Page() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="w-full">
       <header className="w-full max-w-lg mx-auto mb-8">
         <h1 className="text-3xl font-bold text-foreground">
           Cupcake 2048

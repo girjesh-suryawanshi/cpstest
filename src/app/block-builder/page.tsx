@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function BlockBuilderPage() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="w-full">
       <header className="w-full max-w-4xl mx-auto mb-8">
         <h1 className="text-3xl font-bold text-foreground">
           Block Builder
