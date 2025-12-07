@@ -9,6 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Zap, ShieldCheck, Target, Search, ArrowRight, Gamepad2, Type, BrainCircuit, Grip, Puzzle, Brain, Eye, MessageSquare, Paintbrush, FileText, Blocks, Share2, GraduationCap, Languages, Wind, Keyboard, Disc, Timer, MousePointerClick } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 
 const JitterClickIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -264,10 +270,27 @@ export default function Home() {
        <section className="w-full max-w-6xl mx-auto">
          <Card className="bg-card/50 border-border/20 backdrop-blur-sm">
             <CardContent className="p-6">
-                 <Link href="#" className="flex justify-between items-center group">
-                    <h2 className="text-2xl font-bold group-hover:text-primary">How it works</h2>
-                    <ArrowRight className="text-muted-foreground group-hover:text-primary" />
-                </Link>
+                 <h2 className="text-2xl font-bold mb-4">How It Works</h2>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>How does the CPS Test work?</AccordionTrigger>
+                    <AccordionContent>
+                      The Clicks Per Second (CPS) test is simple. When you start the test, a timer begins. Click the designated area as many times as you can before the timer runs out. Your score is calculated by dividing the total number of clicks by the duration of the test.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>How are the Ranks Calculated?</AccordionTrigger>
+                    <AccordionContent>
+                      Your rank is determined by your CPS score. Each rank corresponds to a specific CPS range, from Turtle for beginners to Falcon for elite clickers. The ranges are designed to give you a clear idea of your skill level compared to other players.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-3">
+                    <AccordionTrigger>How do the other games help?</AccordionTrigger>
+                    <AccordionContent>
+                      Beyond click speed, we offer a variety of games to train different skills. The Aim Trainer improves your mouse precision, Memory games challenge your cognitive recall, and Typing tests increase your keyboard speed and accuracy. Each game is designed to sharpen a different aspect of your computer-based skills.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
             </CardContent>
          </Card>
        </section>
