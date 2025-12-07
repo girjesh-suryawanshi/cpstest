@@ -9,7 +9,7 @@ interface GameCardProps {
   description: string;
   href: string;
   icon: React.ReactNode;
-  badge?: 'New' | 'Trending';
+  badge?: string;
 }
 
 export function GameCard({ title, description, href, icon, badge }: GameCardProps) {
@@ -18,10 +18,10 @@ export function GameCard({ title, description, href, icon, badge }: GameCardProp
       <Card className="h-full bg-card border border-border/20 rounded-2xl shadow-lg transition-all duration-300 hover:border-primary/50 hover:-translate-y-1">
         {badge && (
             <div className="relative">
-                <Badge variant={badge === 'New' ? 'default' : 'secondary'} className={cn(
+                <Badge variant={badge === 'NEW' ? 'default' : 'secondary'} className={cn(
                     "absolute top-4 right-4",
-                    badge === 'New' && "bg-blue-500",
-                    badge === 'Trending' && "bg-orange-500"
+                    badge === 'NEW' && "bg-blue-500",
+                    badge === 'TRENDING' && "bg-orange-500"
                 )}>
                     {badge}
                 </Badge>
